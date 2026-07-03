@@ -55,13 +55,13 @@ export default function CustomAuthLayout({
 
           <div className="relative z-10 my-auto max-w-sm space-y-6">
             <h1 className="text-3xl font-extrabold tracking-tight text-white leading-tight">
-              Nơi kết nối <br />
+              Siêu Ứng Dụng <br />
               <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
-                Cộng đồng IT & MMO
+                Dịch Vụ & Việc Làm Bản Địa
               </span>
             </h1>
             <p className="text-xs leading-relaxed text-slate-400">
-              PawBook là mạng xã hội kết hợp tuyển dụng chuyên biệt đầu tiên dành cho giới lập trình viên và MMO Master. Tìm kiếm việc làm, chia sẻ bí quyết, và quản lý nhân sự hiệu quả.
+              PawBook kết nối khách hàng với hàng ngàn nhà xe tự do, thợ sửa chữa, giúp việc, spa làm đẹp địa phương trên khắp cả nước với 0% phí chiết khấu nền tảng.
             </p>
 
             <div className="space-y-4 pt-4">
@@ -70,8 +70,8 @@ export default function CustomAuthLayout({
                   <Sparkles className="h-3.5 w-3.5" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-slate-200">Chia sẻ kiến thức & FOMO</h4>
-                  <p className="text-3xs text-slate-500">Cập nhật tin tức thị trường và xu hướng MMO/IT hot nhất.</p>
+                  <h4 className="text-xs font-bold text-slate-200">🚕 Gọi xe & Giao nhận 0% chiết khấu</h4>
+                  <p className="text-3xs text-slate-500">Kết nối trực tiếp tài xế và khách hàng, tăng 100% thu nhập.</p>
                 </div>
               </div>
 
@@ -80,8 +80,8 @@ export default function CustomAuthLayout({
                   <MessageSquareCode className="h-3.5 w-3.5" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-slate-200">Tìm việc làm chất lượng cao</h4>
-                  <p className="text-3xs text-slate-500">Tiếp cận trực tiếp với các nhà tuyển dụng và dự án outsourcing MMO xịn.</p>
+                  <h4 className="text-xs font-bold text-slate-200">🛠️ Dịch vụ tận cửa</h4>
+                  <p className="text-3xs text-slate-500">Tìm thợ sửa chữa điện nước, giúp việc, dọn sofa, spa làm đẹp... chỉ với 1 chạm.</p>
                 </div>
               </div>
 
@@ -90,8 +90,8 @@ export default function CustomAuthLayout({
                   <ShieldCheck className="h-3.5 w-3.5" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-slate-200">Bảo mật thông tin</h4>
-                  <p className="text-3xs text-slate-500">Được bảo vệ bởi hệ thống bảo mật cấp cao của NextAuth.js.</p>
+                  <h4 className="text-xs font-bold text-slate-200">🌍 Cộng đồng chia sẻ</h4>
+                  <p className="text-3xs text-slate-500">Tham gia mạng lưới kết nối đa ngành nghề lớn nhất Việt Nam.</p>
                 </div>
               </div>
             </div>

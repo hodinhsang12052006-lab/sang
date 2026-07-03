@@ -51,7 +51,7 @@ async function main() {
     // 1. Vận tải & Giao nhận (Grab Competitor - 5 jobs)
     {
       title: "Xe dịch vụ 4 chỗ/7 chỗ (0% Chiết khấu)",
-      description: "Tuyển tài xế chạy xe dịch vụ chở khách nội thành và đi tỉnh. Nhận 100% thu nhập, cam kết không thu chiết khấu phần trăm.",
+      description: "Hôm nay em mới chạy cuốc xe dịch vụ từ Quận 1 ra Sân bay, đường kẹt cứng nhưng trộm vía khách thoải mái còn bo thêm. Anh em tài xế chạy xe 4 chỗ hoặc 7 chỗ tự do hợp tác với em nhé, bên em cam kết không thu 1% chiết khấu nào hết, chạy nhiêu hưởng trọn bấy nhiêu nha!",
       salary: "15.000.000đ - 25.000.000đ",
       companyName: "Gia tộc Vận Tải Việt",
       niche: "OTHERS",
@@ -61,7 +61,7 @@ async function main() {
     },
     {
       title: "Xe ôm công nghệ tự do",
-      description: "Đưa đón khách hàng quanh khu vực trung tâm quận 1 và quận 3. Thời gian linh hoạt tự chọn, thu nhập nhận đủ 100%.",
+      description: "Chào anh em! Em chạy xe ôm công nghệ tự quản quanh khu vực trung tâm quận 1 và quận 3. Thời gian chạy hoàn toàn tự do, thích thì bật app chạy không thì nghỉ ngơi uống ly nước mía, thu nhập giữ trọn 100% không lo bị bóp chiết khấu 30% như bên hãng khác đâu.",
       salary: "8.000.000đ - 14.000.000đ",
       companyName: "Đội Xe Ôm Tự Quản",
       niche: "OTHERS",
@@ -71,7 +71,7 @@ async function main() {
     },
     {
       title: "Ba gác chở đồ trọn gói",
-      description: "Chở hàng hóa, dọn nhà, chuyển trọ cho sinh viên và hộ gia đình nhỏ bằng xe ba gác máy. Cần sức khỏe tốt.",
+      description: "Anh chị em nào chuẩn bị chuyển phòng trọ, dọn văn phòng hay chở tủ bàn ghế cồng kềnh thì cứ hú em nhé. Xe ba gác máy của em đi được mọi ngóc ngách hẻm nhỏ Sài Gòn/Hà Nội, hỗ trợ bê vác đồ đạc nhiệt tình trọn gói từ A đến Z luôn ạ.",
       salary: "12.000.000đ - 18.000.000đ",
       companyName: "Vận Chuyển Thành Đô",
       niche: "OTHERS",
@@ -81,7 +81,7 @@ async function main() {
     },
     {
       title: "Shipper giao đồ ăn/hàng hóa quanh khu vực",
-      description: "Giao đồ ăn từ nhà hàng đến khách hàng hoặc giao nhận bưu phẩm nhỏ. Thu nhập tính theo đơn hàng thực tế.",
+      description: "Góc shipper: Hôm nay đơn nổ liên tục chạy bở hơi tai nhưng bù lại ví dày lên chút. Bác nào muốn nhận đơn giao đồ ăn hoặc bưu phẩm khu vực xung quanh kiếm thêm thu nhập thì liên hệ em cùng chạy đội nhóm cho vui, giá cước đơn nhận đủ không chiết khấu.",
       salary: "7.000.000đ - 12.000.000đ",
       companyName: "PawBook Express Delivery",
       niche: "OTHERS",
@@ -91,7 +91,7 @@ async function main() {
     },
     {
       title: "Chuyển nhà sinh viên giá rẻ",
-      description: "Hỗ trợ bốc xếp đồ đạc, đóng gói hộp carton và vận chuyển đồ đạc từ phòng trọ cũ sang phòng trọ mới cho học sinh sinh viên.",
+      description: "Nhóm chuyển trọ sinh viên tụi em nhận đóng gói hộp carton, bốc xếp tủ giường, chở đồ đạc giá cực kỳ hạt dẻ hỗ trợ các bạn học sinh sinh viên. Cam kết làm việc nhanh nhẹn, giữ gìn đồ đạc cẩn thận không lo hư hỏng hay thất lạc nha các bạn ơi.",
       salary: "300.000đ - 800.000đ / ngày",
       companyName: "Đội Vận Chuyển Tình Nguyện",
       niche: "OTHERS",
@@ -103,7 +103,7 @@ async function main() {
     // 2. Thợ thuyền & Sửa chữa (5 jobs)
     {
       title: "Sửa chữa điện lạnh tận nhà",
-      description: "Khắc phục sự cố tủ lạnh không lạnh, sửa mạch máy giặt, vệ sinh điều hòa nhiệt độ tại nhà khách hàng.",
+      description: "Chia sẻ bà con cách nhận biết máy lạnh bị thiếu gas. Nếu thấy cục nóng kêu to mà gió trong phòng không thấy lạnh thì alo em qua kiểm tra sửa chữa tận nhà nhé, cam kết báo đúng bệnh lấy đúng giá sinh viên.",
       salary: "12.000.000đ - 20.000.000đ",
       companyName: "Điện Lạnh Bách Khoa",
       niche: "MECHANIC",
@@ -113,7 +113,7 @@ async function main() {
     },
     {
       title: "Thợ hàn xì mái tôn nhà phố",
-      description: "Thi công lắp đặt khung thép, hàn mái tôn, làm lan can cầu thang sắt và sửa cửa sắt bị xệ gỉ sét.",
+      description: "Mùa mưa đến rồi, nhà bác nào bị dột mái tôn, xệ cửa sắt hay muốn làm thêm lan can sắt bảo vệ ban công thì cứ nhắn tin cho em. Em thợ hàn cơ khí nhiều năm kinh nghiệm, làm việc tỉ mỉ bền đẹp, bảo hành dột mái chu đáo cho cả nhà yên tâm.",
       salary: "10.000.000đ - 15.000.000đ",
       companyName: "Cơ Khí Dân Dụng Tiến Phát",
       niche: "MECHANIC",
@@ -123,7 +123,7 @@ async function main() {
     },
     {
       title: "Sửa điện nước 24/7 khẩn cấp",
-      description: "Xử lý rò rỉ đường ống nước ngầm, chập cháy điện âm tường, thay lắp vòi hoa sen, thiết bị vệ sinh.",
+      description: "Chập cháy điện âm tường hay rò rỉ nước ngầm luôn là nỗi ám ảnh ban đêm. Đội thợ điện nước tụi em túc trực 24/7 khẩn cấp, gọi là có mặt sau 15 phút xử lý triệt để sự cố cho bà con sinh hoạt bình thường.",
       salary: "11.000.000đ - 17.000.000đ",
       companyName: "Dịch Vụ Nước Sạch 24H",
       niche: "MECHANIC",
@@ -133,7 +133,7 @@ async function main() {
     },
     {
       title: "Cứu hộ xe máy/ô tô bị ngập nước",
-      description: "Kích nổ bình ắc quy, xử lý chết máy do ngập nước, cẩu kéo xe ô tô gặp nạn về gara sửa chữa.",
+      description: "Góc cứu hộ đường phố: Đường ngập nước xe chết máy giữa chừng, ô tô hết bình ắc quy dọc đường... gọi ngay đội cứu hộ tụi em. Có xe cẩu kéo về gara sửa chữa hoặc xử lý tại chỗ sấy khô động cơ lấy liền cho anh em đi tiếp.",
       salary: "15.000.000đ - 25.000.000đ",
       companyName: "Gara Cứu Hộ Sài Gòn",
       niche: "MECHANIC",
@@ -143,7 +143,7 @@ async function main() {
     },
     {
       title: "Thợ hàn inox & cửa nhôm kính",
-      description: "Gia công lắp đặt tủ bếp inox, tủ nhôm kính, cửa kính cường lực cho các cửa tiệm mặt phố.",
+      description: "Bên em chuyên gia công lắp đặt cửa nhôm kính xingfa, tủ bếp inox, vách ngăn kính cường lực cho các shop thời trang, quán cafe mặt phố. Thi công nhanh gọn đẹp mắt, giá cả cạnh tranh nhất thị trường.",
       salary: "9.000.000đ - 13.000.000đ",
       companyName: "Nhôm Kính Thành Đạt",
       niche: "MECHANIC",
@@ -155,7 +155,7 @@ async function main() {
     // 3. Dịch vụ gia đình (3 jobs)
     {
       title: "Giúp việc theo giờ căn hộ chung cư",
-      description: "Lau dọn nhà cửa, quét bụi, giặt quần áo, nấu ăn bữa tối gia đình đơn giản theo yêu cầu của gia chủ.",
+      description: "Em nhận lau dọn nhà cửa, quét dọn bụi bặm, giặt quần áo và nấu bữa tối gia đình đơn giản theo giờ cho các anh chị bận rộn. Tính em sạch sẽ, trung thực, ngăn nắp nên mọi người hoàn toàn yên tâm giao phó ạ.",
       salary: "50.000đ - 80.000đ / giờ",
       companyName: "HomeCare Maid Agency",
       niche: "OTHERS",
@@ -165,7 +165,7 @@ async function main() {
     },
     {
       title: "Vệ sinh máy lạnh chuyên sâu",
-      description: "Thực hiện xịt rửa dàn nóng, dàn lạnh điều hòa treo tường, nạp gas bổ sung và kiểm tra thoát nước.",
+      description: "Bảo dưỡng máy lạnh định kỳ là cách tốt nhất để tiết kiệm điện và bảo vệ sức khỏe gia đình. Em nhận xịt rửa dàn nóng dàn lạnh điều hòa, đo gas và nạp bổ sung gas chuẩn chỉ từ 300k, làm việc sạch sẽ gọn gàng.",
       salary: "300.000đ - 500.000đ / bộ",
       companyName: "CleanAir Việt Nam",
       niche: "MECHANIC",
@@ -175,7 +175,7 @@ async function main() {
     },
     {
       title: "Dọn vệ sinh sofa/đệm bằng máy hơi nước",
-      description: "Sử dụng thiết bị chuyên dụng phun hút giặt sạch ghế sofa nỉ, đệm lò xo, thảm trải sàn văn phòng.",
+      description: "Sofa nỉ hay đệm ngủ lâu ngày tích tụ nhiều bụi bẩn và vi khuẩn gây ngứa ngáy. Bên em nhận giặt phun hút sofa, đệm lò xo, thảm trải sàn văn phòng bằng máy hơi nước nóng khử khuẩn sạch bong như mới, không còn mùi ẩm mốc.",
       salary: "8.000.000đ - 11.000.000đ",
       companyName: "Thanh Tẩy Không Gian Sạch",
       niche: "OTHERS",
@@ -187,7 +187,7 @@ async function main() {
     // 4. Làm đẹp & F&B (4 jobs)
     {
       title: "Thợ phụ Spa/Nail chuyên nghiệp",
-      description: "Hỗ trợ gội đầu dưỡng sinh, massage mặt, làm móng gel nghệ thuật cho khách hàng nữ tại tiệm.",
+      description: "Góc tuyển dụng làm đẹp: Tiệm Nail bên em cần tìm thêm các bạn thợ phụ hỗ trợ gội đầu dưỡng sinh, massage mặt và sơn sửa móng cơ bản cho khách. Môi trường làm việc thoải mái, đồng nghiệp vui vẻ hòa đồng lắm nha.",
       salary: "6.000.000đ - 9.000.000đ",
       companyName: "Tiệm Nail Bông Sen",
       niche: "SPA",
@@ -197,7 +197,7 @@ async function main() {
     },
     {
       title: "Tuyển thợ cắt tóc nam/nữ tạo kiểu",
-      description: "Cắt tạo kiểu tóc nam (Undercut, Mohican) hoặc uốn nhuộm tóc nữ theo xu hướng thị trường thịnh hành.",
+      description: "Salon Bông Sen cần tuyển thợ chính cắt tóc nam nữ tạo kiểu undercut, mohican, uốn nhuộm theo trend. Lương cứng ổn định cộng thêm doanh số dịch vụ hấp dẫn, được đào tạo nâng cao tay nghề thường xuyên.",
       salary: "8.000.000đ - 12.000.000đ + Doanh thu",
       companyName: "Hair Salon Bông Sen",
       niche: "SPA",
@@ -207,7 +207,7 @@ async function main() {
     },
     {
       title: "Nhân viên phục vụ Cafe / Trà sữa",
-      description: "Chào đón khách, bưng bê phục vụ cà phê nước uống, giữ gìn quầy thu ngân và quán gọn gàng.",
+      description: "Quán Cafe Miệt Vườn tuyển nhân viên phục vụ nam nữ ca gãy hoặc xoay ca linh hoạt. Công việc nhẹ nhàng chỉ cần chào đón khách, ghi order đồ uống và bưng bê phục vụ. Môi trường năng động, thích hợp cho sinh viên làm thêm.",
       salary: "4.500.000đ - 6.000.000đ",
       companyName: "Cafe Miệt Vườn",
       niche: "FNB",
@@ -217,7 +217,7 @@ async function main() {
     },
     {
       title: "Pha chế Cafe máy (Barista) ca gãy",
-      description: "Vận hành máy pha cà phê espresso, pha chế trà trái cây và các loại nước uống theo định lượng công thức.",
+      description: "Em cần tìm bạn Barista pha chế cafe espresso bằng máy và pha các loại trà trái cây theo công thức định lượng có sẵn. Yêu cầu sạch sẽ, ngăn nắp, biết giữ gìn vệ sinh quầy bar luôn bóng loáng.",
       salary: "6.000.000đ - 8.500.000đ",
       companyName: "Urban Coffee Roasters",
       niche: "FNB",
@@ -229,7 +229,7 @@ async function main() {
     // 5. Giải trí & Thú cưng (3 jobs)
     {
       title: "Cho thuê loa kẹo kéo hát tiệc gia đình",
-      description: "Vận chuyển loa kéo công suất lớn tận nơi, setup micro không dây và hỗ trợ khách hàng kết nối bluetooth ca hát.",
+      description: "Nhà bác nào có tiệc sinh nhật, liên hoan gia đình muốn hát karaoke giải trí thì gọi em nhé. Em cho thuê loa kéo công suất lớn âm thanh cực hay kèm 2 micro không dây hút giọng, giao loa tận nơi và setup miễn phí.",
       salary: "200.000đ - 400.000đ / ngày",
       companyName: "Âm Thanh Sự Kiện Đô Thành",
       niche: "OTHERS",
@@ -239,7 +239,7 @@ async function main() {
     },
     {
       title: "Chụp ảnh sự kiện dạo / Ngoại cảnh",
-      description: "Chụp ảnh kỷ yếu, chụp ngoại cảnh cá nhân hoặc chụp ảnh tiệc sinh nhật bằng máy ảnh cơ chất lượng cao.",
+      description: "Bác nào muốn có bộ ảnh kỷ yếu đẹp, ảnh ngoại cảnh cá nhân lung linh hay cần thợ chụp hình tiệc sinh nhật, sự kiện nhỏ thì liên hệ em nha. Máy ảnh cơ chuyên nghiệp, trả file gốc nhanh và hỗ trợ photoshop nhiệt tình.",
       salary: "800.000đ - 1.500.000đ / buổi",
       companyName: "Pixel Studio Việt Nam",
       niche: "OTHERS",
@@ -249,7 +249,7 @@ async function main() {
     },
     {
       title: "Tắm tỉa lông chó mèo tại nhà khách",
-      description: "Cắt móng, vệ sinh tai, tắm sấy thơm tho và cắt tỉa tạo kiểu lông nghệ thuật cho các bé cún, bé mèo.",
+      description: "Dịch vụ spa thú cưng tận nhà: Em nhận cắt móng, vệ sinh tai, tắm sấy thơm tho và cắt tỉa lông tạo kiểu nghệ thuật cho các bé cún, bé mèo cưng của bạn ngay tại nhà, không cần mang đi xa tránh các bé bị stress.",
       salary: "8.000.000đ - 11.000.000đ",
       companyName: "Pet Grooming Mobile",
       niche: "SPA",
