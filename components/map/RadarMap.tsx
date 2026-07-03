@@ -48,9 +48,25 @@ export default function RadarMap({ jobs }: RadarMapProps) {
             <Popup>
               <div className="p-2 space-y-1.5 min-w-[200px] text-slate-800">
                 <div className="flex gap-1 items-center">
-                  <span className="inline-flex items-center rounded-md bg-blue-100 px-2 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-200 uppercase">
-                    {job.niche}
-                  </span>
+                  {(() => {
+                    const titleLower = job.title.toLowerCase();
+                    const isTransport = titleLower.includes("xe") || titleLower.includes("vận tải") || titleLower.includes("shipper") || titleLower.includes("chuyển nhà");
+                    const isMechanic = job.niche === "MECHANIC" || titleLower.includes("thợ") || titleLower.includes("sửa");
+                    const isBeauty = job.niche === "SPA" || titleLower.includes("hair") || titleLower.includes("nail") || titleLower.includes("cắt tóc");
+                    const isFnB = job.niche === "FNB";
+
+                    let displayNiche = job.niche;
+                    if (isTransport) displayNiche = "🚕 VẬN TẢI";
+                    else if (isMechanic) displayNiche = "🛠️ CƠ KHÍ";
+                    else if (isBeauty) displayNiche = "💅 LÀM ĐẸP";
+                    else if (isFnB) displayNiche = "☕ F&B";
+
+                    return (
+                      <span className="inline-flex items-center rounded-md bg-blue-100 px-2 py-0.5 text-[9px] font-bold text-blue-600 border border-blue-200 uppercase">
+                        {displayNiche}
+                      </span>
+                    );
+                  })()}
                   {job.is_premium && (
                     <span className="inline-flex items-center rounded-md bg-amber-100 px-2 py-0.5 text-[9px] font-bold text-amber-700 border border-amber-200 uppercase">
                       🔥 HOT

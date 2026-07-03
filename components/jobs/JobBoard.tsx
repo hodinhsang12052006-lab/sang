@@ -17,6 +17,7 @@ export interface JobType {
   employerId?: string;
   createdAt: string;
   reviews?: any[];
+  niche?: string;
 }
 
 interface JobBoardProps {
@@ -170,25 +171,52 @@ export default function JobBoard({ jobs: initialJobs }: JobBoardProps) {
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="space-y-2 flex-1 min-w-0">
                   <div className="flex items-center gap-2.5">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-850 border border-slate-750 flex-shrink-0">
-                      <Building className="h-5 w-5 text-blue-400" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        {((job as any).is_premium || job.isBoosted) && (
-                          <span className="inline-flex items-center rounded bg-amber-500/20 px-1.5 py-0.5 text-[9px] font-extrabold text-amber-400 border border-amber-500/35 uppercase tracking-wider">
-                            🔥 HOT / TÀI TRỢ
-                          </span>
-                        )}
-                        <h3
-                          onClick={() => handleApplyClick(job.id)}
-                          className="text-sm font-bold text-slate-100 hover:text-blue-400 transition-colors cursor-pointer truncate"
-                        >
-                          {job.title}
-                        </h3>
-                      </div>
-                      <p className="text-xs text-slate-400 truncate">{job.companyName}</p>
-                    </div>
+                    {(() => {
+                      const titleLower = job.title.toLowerCase();
+                      const isTransport = titleLower.includes("xe") || titleLower.includes("vận tải") || titleLower.includes("shipper") || titleLower.includes("chuyển nhà");
+                      const isMechanic = job.niche === "MECHANIC" || titleLower.includes("thợ") || titleLower.includes("sửa");
+                      const isBeauty = job.niche === "SPA" || titleLower.includes("hair") || titleLower.includes("nail") || titleLower.includes("cắt tóc");
+                      const isFnB = job.niche === "FNB";
+                      
+                      return (
+                        <>
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-850 border border-slate-750 flex-shrink-0 text-lg">
+                            {isTransport ? (
+                              titleLower.includes("xe ôm") ? "🏍️" : "🚕"
+                            ) : isMechanic ? (
+                              "🛠️"
+                            ) : isBeauty ? (
+                              "💅"
+                            ) : isFnB ? (
+                              "☕"
+                            ) : (
+                              <Building className="h-5 w-5 text-blue-400" />
+                            )}
+                          </div>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              {((job as any).is_premium || job.isBoosted) && (
+                                <span className="inline-flex items-center rounded bg-amber-500/20 px-1.5 py-0.5 text-[9px] font-extrabold text-amber-400 border border-amber-500/35 uppercase tracking-wider">
+                                  🔥 HOT / TÀI TRỢ
+                                </span>
+                              )}
+                              {isTransport && (
+                                <span className="inline-flex items-center rounded bg-emerald-500/20 px-1.5 py-0.5 text-[9px] font-extrabold text-emerald-400 border border-emerald-500/35 uppercase tracking-wider">
+                                  Thu nhập 100% - Không chiết khấu
+                                </span>
+                              )}
+                              <h3
+                                onClick={() => handleApplyClick(job.id)}
+                                className="text-sm font-bold text-slate-100 hover:text-blue-400 transition-colors cursor-pointer truncate"
+                              >
+                                {job.title}
+                              </h3>
+                            </div>
+                            <p className="text-xs text-slate-400 truncate">{job.companyName}</p>
+                          </div>
+                        </>
+                      );
+                    })()}
                   </div>
 
                   {/* Metadata */}
