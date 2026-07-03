@@ -33,10 +33,11 @@ export default function ServicesPage() {
 
   const categories = [
     { id: "all", label: "Tất cả ngành nghề" },
-    { id: "Spa", label: "Spa & Làm đẹp" },
-    { id: "Điện lạnh", label: "Điện lạnh & Điện tử" },
-    { id: "Xây dựng", label: "Xây dựng & Sửa nhà" },
-    { id: "Sửa chữa", label: "Sửa xe & Cứu hộ" },
+    { id: "Vận tải", label: "🚕 Vận tải & Đặt xe" },
+    { id: "Sửa chữa", label: "🛠️ Thợ & Sửa chữa" },
+    { id: "Gia đình", label: "🧹 Dịch vụ gia đình" },
+    { id: "Spa", label: "💅 Spa & Làm đẹp" },
+    { id: "F&B", label: "☕ F&B & Quán ăn" },
   ];
 
   const handleBoost = async (type: string, id: string) => {
@@ -143,7 +144,7 @@ export default function ServicesPage() {
                 Danh Bạ Dịch Vụ & Cửa Hàng Địa Phương
               </h1>
               <p className="text-xs text-slate-400 mt-1 max-w-xl">
-                Nơi quảng bá và tìm kiếm các cửa hàng dịch vụ chất lượng: Spa, Điện lạnh, Xây dựng, Sửa chữa... giúp kết nối doanh nghiệp địa phương với cộng đồng.
+                Nơi quảng bá và tìm kiếm các cửa hàng dịch vụ chất lượng: Spa, Vận tải xe ôm 0%, Gia đình, F&B, Sửa chữa... giúp kết nối doanh nghiệp địa phương với cộng đồng.
               </p>
             </div>
 

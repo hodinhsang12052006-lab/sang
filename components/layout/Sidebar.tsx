@@ -12,10 +12,31 @@ interface SidebarProps {
 export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const [sessionUser, setSessionUser] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    async function loadSession() {
+      try {
+        const res = await fetch("/api/auth/session");
+        if (res.ok) {
+          const session = await res.json();
+          setSessionUser(session.user);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadSession();
+  }, []);
+
+  const userName = sessionUser?.name || "Khách ghé chơi";
+  const userRole = sessionUser?.role || "GUEST";
+  const userAvatar = sessionUser?.avatarUrl || "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80";
+  const userBio = sessionUser ? (sessionUser.role === "EMPLOYER" ? "Chủ cửa hàng dịch vụ" : "Thành viên PawBook") : "Thành viên PawBook";
 
   const menuItems = [
     { id: "feed", label: "Bảng tin", icon: Home, route: "/?tab=feed" },
-    { id: "jobs", label: "Việc làm IT/MMO", icon: Briefcase, route: "/?tab=jobs" },
+    { id: "jobs", label: "Tuyển dụng & Việc làm", icon: Briefcase, route: "/?tab=jobs" },
     { id: "tools", label: "Tools Marketing", icon: Rocket, route: "/?tab=tools" },
     { id: "hr", label: "Quản lý HR", icon: Settings, route: "/?tab=hr" },
     { id: "services", label: "Dịch vụ & Cửa hàng", icon: Store, route: "/services" },
@@ -65,16 +86,20 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
           <div className="mb-6 flex flex-col items-center border-b border-slate-800 pb-5 text-center">
             <div className="relative h-16 w-16 overflow-hidden rounded-full border-2 border-blue-500/50 shadow-md cursor-pointer hover:opacity-85 transition-opacity" onClick={() => router.push("/profile")}>
               <img
-                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=120&auto=format&fit=crop&q=80"
+                src={userAvatar}
                 alt="User Profile"
                 className="h-full w-full object-cover"
               />
             </div>
-            <h2 className="mt-3 text-sm font-semibold text-slate-100 cursor-pointer hover:underline" onClick={() => router.push("/profile")}>Nguyễn Văn A</h2>
-            <p className="text-xs text-slate-400">Senior Fullstack Developer</p>
-            <span className="mt-2 inline-flex items-center rounded-full bg-blue-500/10 px-2 py-0.5 text-2xs font-medium text-blue-400 border border-blue-500/20">
-              EMPLOYER
-            </span>
+            <h2 className="mt-3 text-sm font-semibold text-slate-100 cursor-pointer hover:underline animate-pulse" onClick={() => router.push("/profile")}>
+              {userName}
+            </h2>
+            <p className="text-xs text-slate-400 font-semibold">{userBio}</p>
+            {sessionUser && (
+              <span className="mt-2 inline-flex items-center rounded-full bg-blue-500/10 px-2 py-0.5 text-2xs font-medium text-blue-400 border border-blue-500/20 uppercase tracking-wider">
+                {userRole}
+              </span>
+            )}
           </div>
 
           {/* Navigation Menu */}

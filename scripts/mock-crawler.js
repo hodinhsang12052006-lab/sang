@@ -259,8 +259,27 @@ async function main() {
     },
   ];
 
-  const iterationsCount = 8; // 8 * 20 = 160 jobs
-  console.log(`Crawling and inserting ${mockJobsData.length * iterationsCount} multi-niche jobs into Turso...`);
+  console.log("Cleaning up old database listings (Purging jobs, services, reviews)...");
+  await prisma.review.deleteMany({});
+  await prisma.job.deleteMany({});
+  await prisma.service.deleteMany({});
+  console.log("Database clean up successful.");
+
+  const cities = [
+    { name: "Hà Nội", lat: 21.0285, lng: 105.8542 },
+    { name: "TP. Hồ Chí Minh", lat: 10.7626, lng: 106.6602 },
+    { name: "Đà Nẵng", lat: 16.0544, lng: 108.2022 },
+    { name: "Cần Thơ", lat: 10.0371, lng: 105.7882 },
+    { name: "Hải Phòng", lat: 20.8449, lng: 106.6881 },
+    { name: "Nha Trang", lat: 12.2388, lng: 109.1967 },
+    { name: "Huế", lat: 16.4637, lng: 107.5909 },
+    { name: "Đà Lạt", lat: 11.9404, lng: 108.4583 },
+    { name: "Vinh", lat: 18.6734, lng: 105.6812 },
+    { name: "Buôn Ma Thuột", lat: 12.6853, lng: 108.0383 },
+  ];
+
+  const iterationsCount = 3; // 3 * 20 = 60 items
+  console.log(`Crawling and inserting ${mockJobsData.length * iterationsCount} multi-niche jobs & services into Turso...`);
 
   let insertedCount = 0;
   for (let cycle = 0; cycle < iterationsCount; cycle++) {
@@ -269,10 +288,17 @@ async function main() {
       const employerId = getRandomEmployer();
       insertedCount++;
 
-      // Introduce coordinate offsets to disperse pins on the map view
-      const latOffset = (Math.random() - 0.5) * 0.015;
-      const lngOffset = (Math.random() - 0.5) * 0.015;
+      // Pick a random city to assign geographic coordinates spanning Vietnam
+      const city = cities[Math.floor(Math.random() * cities.length)];
+      // Add slight disperse offset within city limits
+      const latOffset = (Math.random() - 0.5) * 0.05;
+      const lngOffset = (Math.random() - 0.5) * 0.05;
+      const finalLat = city.lat + latOffset;
+      const finalLng = city.lng + lngOffset;
 
+      const randomRating = parseFloat((Math.random() * 1.0 + 4.0).toFixed(1)); // 4.0 to 5.0 stars
+
+      // 1. Create Job Listing
       await prisma.job.create({
         data: {
           title: cycle > 0 ? `${jobData.title} (Chi nhánh #${cycle})` : jobData.title,
@@ -281,18 +307,43 @@ async function main() {
           companyName: jobData.companyName,
           employerId: employerId,
           niche: jobData.niche,
-          latitude: jobData.latitude ? jobData.latitude + latOffset : null,
-          longitude: jobData.longitude ? jobData.longitude + lngOffset : null,
+          latitude: finalLat,
+          longitude: finalLng,
           ai_tags: jobData.ai_tags,
-          isBoosted: Math.random() > 0.7, // Randomly boost 30% of jobs for organic FOMO
+          isBoosted: Math.random() > 0.7,
         },
       });
 
-      console.log(`[${insertedCount}/${mockJobsData.length * iterationsCount}] Inserted: ${jobData.title} (${jobData.niche})`);
+      // 2. Determine Service Category
+      let serviceCategory = "Khác";
+      const titleLower = jobData.title.toLowerCase();
+      if (jobData.niche === "SPA") serviceCategory = "Spa";
+      else if (jobData.niche === "FNB") serviceCategory = "F&B";
+      else if (jobData.niche === "MECHANIC") serviceCategory = "Sửa chữa";
+      else if (titleLower.includes("xe") || titleLower.includes("vận tải")) serviceCategory = "Vận tải";
+      else if (titleLower.includes("giúp việc") || titleLower.includes("sofa") || titleLower.includes("dọn")) serviceCategory = "Gia đình";
+
+      // 3. Create Corresponding Service Listing
+      await prisma.service.create({
+        data: {
+          name: cycle > 0 ? `${jobData.companyName} (Cơ sở #${cycle})` : jobData.companyName,
+          category: serviceCategory,
+          description: jobData.description,
+          location: `${city.name}, Việt Nam`,
+          contactInfo: "0987.654.321",
+          imageUrl: `https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=400&auto=format&fit=crop&q=60`,
+          priceRange: "200.000đ - 1.500.000đ",
+          rating: randomRating,
+          ownerId: employerId,
+          isBoosted: Math.random() > 0.7,
+        },
+      });
+
+      console.log(`[${insertedCount}/${mockJobsData.length * iterationsCount}] Inserted Job & Service: ${jobData.title} in ${city.name} (${jobData.niche} / ${serviceCategory})`);
     }
   }
 
-  console.log("Mock Crawler synchronization finished! Turso database is populated with scaled multi-niche jobs. 🚀");
+  console.log("Mock Crawler synchronization finished! Turso database is populated with scaled multi-niche jobs and services. 🚀");
 }
 
 main()
