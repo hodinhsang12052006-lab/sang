@@ -72,6 +72,10 @@ model Job {
   isBoosted    Boolean       @default(false)
   boostUntil   DateTime?
   blogPosts    BlogPost[]    // Linked blog posts
+  niche        Niche         @default(IT)
+  latitude     Float?
+  longitude    Float?
+  ai_tags      String?
   createdAt    DateTime      @default(now())
 }
 
@@ -221,3 +225,13 @@ model Transaction {
   provider      String?  // e.g. VNPAY
   createdAt     DateTime @default(now())
 }
+
+enum Niche {
+  IT
+  MMO
+  SPA
+  MECHANIC
+  FNB
+  OTHERS
+}
+
