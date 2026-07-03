@@ -24,6 +24,10 @@ model User {
   cvUrl            String?        // Optional during sign-up
   skills           String?        // Optional during sign-up
   bio              String?        // Optional during sign-up
+  phone            String?
+  address          String?
+  cover_image      String?
+  cv_url           String?
   posts            Post[]
   jobs             Job[]          // For employers posting jobs
   services         Service[]      // Services registered by the user

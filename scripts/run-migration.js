@@ -28,29 +28,10 @@ const client = createClient({
 });
 
 const statements = [
-  'PRAGMA defer_foreign_keys=ON',
-  'PRAGMA foreign_keys=OFF',
-  `CREATE TABLE "new_Job" (
-    "id" TEXT NOT NULL PRIMARY KEY,
-    "title" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "salary" TEXT NOT NULL,
-    "companyName" TEXT NOT NULL,
-    "employerId" TEXT NOT NULL,
-    "isBoosted" BOOLEAN NOT NULL DEFAULT false,
-    "boostUntil" DATETIME,
-    "niche" TEXT NOT NULL DEFAULT 'IT',
-    "latitude" REAL,
-    "longitude" REAL,
-    "ai_tags" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "Job_employerId_fkey" FOREIGN KEY ("employerId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
-  )`,
-  `INSERT INTO "new_Job" ("boostUntil", "companyName", "createdAt", "description", "employerId", "id", "isBoosted", "salary", "title") SELECT "boostUntil", "companyName", "createdAt", "description", "employerId", "id", "isBoosted", "salary", "title" FROM "Job"`,
-  `DROP TABLE "Job"`,
-  `ALTER TABLE "new_Job" RENAME TO "Job"`,
-  'PRAGMA foreign_keys=ON',
-  'PRAGMA defer_foreign_keys=OFF'
+  'ALTER TABLE "User" ADD COLUMN "address" TEXT',
+  'ALTER TABLE "User" ADD COLUMN "cover_image" TEXT',
+  'ALTER TABLE "User" ADD COLUMN "cv_url" TEXT',
+  'ALTER TABLE "User" ADD COLUMN "phone" TEXT'
 ];
 
 async function run() {
