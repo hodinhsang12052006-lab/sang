@@ -9,26 +9,79 @@ export async function POST(req: Request) {
 
     if (!session || !session.user) {
       return NextResponse.json(
-        { error: "Vui lòng đăng nhập để gửi đánh giá tín nhiệm." },
+        { error: "Vui lòng đăng nhập để gửi đánh giá." },
         { status: 401 }
       );
     }
 
     const userId = (session.user as any).id;
     const body = await req.json();
-    const { rating, content, targetUserId, gigId } = body;
-
-    if (!rating || !content || !content.trim() || !targetUserId) {
-      return NextResponse.json(
-        { error: "Vui lòng nhập đầy đủ xếp hạng sao, nội dung và người nhận đánh giá." },
-        { status: 400 }
-      );
-    }
+    const { rating, content, comment, targetUserId, jobId, gigId } = body;
 
     const parsedRating = parseInt(rating);
     if (isNaN(parsedRating) || parsedRating < 1 || parsedRating > 5) {
       return NextResponse.json(
         { error: "Xếp hạng đánh giá phải từ 1 đến 5 sao." },
+        { status: 400 }
+      );
+    }
+
+    const reviewComment = comment || content || "";
+    if (!reviewComment.trim()) {
+      return NextResponse.json(
+        { error: "Vui lòng nhập nội dung đánh giá." },
+        { status: 400 }
+      );
+    }
+
+    // 1. Job review path
+    if (jobId) {
+      const job = await prisma.job.findUnique({
+        where: { id: jobId },
+        select: { id: true, employerId: true },
+      });
+
+      if (!job) {
+        return NextResponse.json(
+          { error: "Tin tuyển dụng hoặc dịch vụ không tồn tại." },
+          { status: 404 }
+        );
+      }
+
+      if (job.employerId === userId) {
+        return NextResponse.json(
+          { error: "Bạn không thể tự đánh giá dịch vụ của chính mình." },
+          { status: 400 }
+        );
+      }
+
+      // Create review under Job and target user (employer)
+      const newReview = await prisma.review.create({
+        data: {
+          rating: parsedRating,
+          content: reviewComment,
+          comment: reviewComment,
+          reviewerId: userId,
+          targetUserId: job.employerId,
+          jobId,
+        },
+        include: {
+          reviewer: {
+            select: { id: true, name: true, avatarUrl: true },
+          },
+        },
+      });
+
+      return NextResponse.json({
+        message: "Gửi đánh giá dịch vụ thành công! ⭐",
+        review: newReview,
+      });
+    }
+
+    // 2. Legacy: User evaluation path
+    if (!targetUserId) {
+      return NextResponse.json(
+        { error: "Vui lòng nhập đầy đủ xếp hạng sao, nội dung và người nhận đánh giá." },
         { status: 400 }
       );
     }
@@ -40,7 +93,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Verify target user exists
     const targetUser = await prisma.user.findUnique({
       where: { id: targetUserId },
     });
@@ -52,7 +104,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Anti-manipulation security check: Verify verified collaboration history (Bids or Applications)
+    // Anti-manipulation collaboration check
     const bidLink = await prisma.bid.findFirst({
       where: {
         OR: [
@@ -78,11 +130,11 @@ export async function POST(req: Request) {
       );
     }
 
-    // 1. Create review entry
     const newReview = await prisma.review.create({
       data: {
         rating: parsedRating,
-        content,
+        content: reviewComment,
+        comment: reviewComment,
         reviewerId: userId,
         targetUserId,
         gigId: gigId || null,
@@ -94,32 +146,28 @@ export async function POST(req: Request) {
       },
     });
 
-    // 2. Fetch all reviews for this target user to recalculate trust score
+    // Recalculate average trust rating
     const allReviews = await prisma.review.findMany({
       where: { targetUserId },
     });
 
     const totalRating = allReviews.reduce((sum, r) => sum + r.rating, 0);
     const averageRating = totalRating / allReviews.length;
-
-    // 3. Update target user trust score
-    // If averageRating falls below 3.0, auto revoke verified checkmark!
     const loseVerification = averageRating < 3.0;
 
     await prisma.user.update({
       where: { id: targetUserId },
       data: {
         trustScore: averageRating,
-        isVerified: loseVerification ? false : undefined, // Keep if good, drop tick if < 3.0
+        isVerified: loseVerification ? false : undefined,
       },
     });
 
-    // Send a system notification to the target user
     await prisma.notification.create({
       data: {
         userId: targetUserId,
         title: "Đánh giá tín nhiệm ⭐",
-        message: `Bạn vừa nhận được đánh giá ${parsedRating} sao: "${content.substring(0, 40)}...". Điểm tín nhiệm mới: ${averageRating.toFixed(1)}/5.0.`,
+        message: `Bạn vừa nhận được đánh giá ${parsedRating} sao: "${reviewComment.substring(0, 40)}...". Điểm tín nhiệm mới: ${averageRating.toFixed(1)}/5.0.`,
         type: "INFO",
       },
     });
@@ -134,6 +182,41 @@ export async function POST(req: Request) {
     console.error("POST review API error:", error);
     return NextResponse.json(
       { error: "Đã xảy ra lỗi hệ thống khi lưu đánh giá." },
+      { status: 500 }
+    );
+  }
+}
+
+// GET method to fetch reviews for a specific job
+export async function GET(req: Request) {
+  try {
+    const url = new URL(req.url);
+    const jobId = url.searchParams.get("jobId");
+
+    if (!jobId) {
+      return NextResponse.json(
+        { error: "Vui lòng cung cấp jobId." },
+        { status: 400 }
+      );
+    }
+
+    const reviews = await prisma.review.findMany({
+      where: { jobId },
+      include: {
+        reviewer: {
+          select: { id: true, name: true, avatarUrl: true },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return NextResponse.json(reviews);
+  } catch (err: any) {
+    console.error("GET reviews error:", err);
+    return NextResponse.json(
+      { error: "Lỗi hệ thống khi tải đánh giá." },
       { status: 500 }
     );
   }

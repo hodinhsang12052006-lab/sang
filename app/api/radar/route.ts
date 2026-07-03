@@ -18,6 +18,7 @@ export async function GET() {
         longitude: true,
         is_premium: true,
         employerId: true,
+        reviews: true,
       },
     });
 

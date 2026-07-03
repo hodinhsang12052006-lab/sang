@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import { ArrowLeft, Briefcase, MapPin, DollarSign, Clock, Building, Sparkles, Send, ShieldCheck, Loader2, AlertCircle, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import toast, { Toaster } from "react-hot-toast";
+import ReviewSection from "@/components/jobs/ReviewSection";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -247,6 +248,9 @@ export default function JobDetailPage({ params }: PageProps) {
                 ))}
               </ul>
             </div>
+
+            {/* Review Section */}
+            <ReviewSection jobId={job.id} employerId={job.employerId} />
           </div>
 
           {/* Quick Apply panel */}

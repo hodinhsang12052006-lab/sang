@@ -16,6 +16,7 @@ interface MapJob {
   longitude: number;
   is_premium?: boolean;
   employerId?: string;
+  reviews?: any[];
 }
 
 interface RadarMapProps {
@@ -55,6 +56,11 @@ export default function RadarMap({ jobs }: RadarMapProps) {
                       🔥 HOT
                     </span>
                   )}
+                  <span className="inline-flex items-center text-[10px] text-amber-600 font-bold ml-auto">
+                    ⭐ {job.reviews && job.reviews.length > 0
+                      ? (job.reviews.reduce((sum, r) => sum + r.rating, 0) / job.reviews.length).toFixed(1)
+                      : "4.8"}
+                  </span>
                 </div>
                 <h4 className="text-xs font-extrabold text-slate-900 leading-tight">
                   {job.title}

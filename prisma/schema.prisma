@@ -84,6 +84,7 @@ model Job {
   latitude     Float?
   longitude    Float?
   ai_tags      String?
+  reviews      Review[]
   createdAt    DateTime      @default(now())
 }
 
@@ -215,11 +216,14 @@ model Review {
   id           String   @id @default(cuid())
   rating       Int      // 1-5 stars
   content      String
+  comment      String?  // nullable comment support
   reviewerId   String
   reviewer     User     @relation("ReviewerReviews", fields: [reviewerId], references: [id], onDelete: Cascade)
-  targetUserId String
-  targetUser   User     @relation("TargetUserReviews", fields: [targetUserId], references: [id], onDelete: Cascade)
+  targetUserId String?  // nullable for User rating reviews compatibility
+  targetUser   User?    @relation("TargetUserReviews", fields: [targetUserId], references: [id], onDelete: Cascade)
   gigId        String?
+  jobId        String?
+  job          Job?     @relation(fields: [jobId], references: [id], onDelete: Cascade)
   createdAt    DateTime @default(now())
 }
 
