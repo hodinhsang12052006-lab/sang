@@ -17,6 +17,13 @@ interface MapJob {
   is_premium?: boolean;
   employerId?: string;
   reviews?: any[];
+  employer?: {
+    isVerified?: boolean;
+  };
+  priceRange?: string | null;
+  isEmergency?: boolean | null;
+  vehicleInfo?: string | null;
+  workType?: string | null;
 }
 
 interface RadarMapProps {
@@ -89,12 +96,39 @@ export default function RadarMap({ jobs }: RadarMapProps) {
 
                 {/* Main Shop / Driver name */}
                 <div>
-                  <h4 className="text-sm font-extrabold text-slate-900 leading-tight m-0">
-                    {job.companyName}
+                  <h4 className="text-sm font-extrabold text-slate-900 leading-tight m-0 flex items-center gap-1">
+                    <span>{job.companyName}</span>
+                    {job.employer?.isVerified && (
+                      <span className="text-blue-500" title="Tài khoản đã xác minh">💎</span>
+                    )}
                   </h4>
                   <p className="text-xs font-semibold text-slate-700 mt-0.5 leading-snug">
                     {job.title}
                   </p>
+                </div>
+
+                {/* Extra specs */}
+                <div className="flex flex-wrap gap-1 text-[9px] mt-1">
+                  {job.priceRange && (
+                    <span className="bg-slate-100 text-slate-700 px-1 py-0.5 rounded border border-slate-200">
+                      💰 Giá: {job.priceRange}
+                    </span>
+                  )}
+                  {job.isEmergency && (
+                    <span className="bg-rose-50 text-rose-700 px-1 py-0.5 rounded border border-rose-100 font-extrabold uppercase animate-pulse">
+                      🚨 24/7
+                    </span>
+                  )}
+                  {job.vehicleInfo && (
+                    <span className="bg-sky-50 text-sky-700 px-1 py-0.5 rounded border border-sky-100 font-semibold">
+                      🚗 Xe: {job.vehicleInfo}
+                    </span>
+                  )}
+                  {job.workType && (
+                    <span className="bg-purple-50 text-purple-700 px-1 py-0.5 rounded border border-purple-100 font-semibold">
+                      ⏱️ {job.workType}
+                    </span>
+                  )}
                 </div>
 
                 {/* Google Maps style ratings summary */}

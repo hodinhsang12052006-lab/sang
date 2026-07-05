@@ -384,7 +384,10 @@ export default function ProfilePage() {
                   <h1 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-1.5">
                     <span>{profile.name}</span>
                     {profile.isVerified && (
-                      <BadgeCheck className="h-5 w-5 text-blue-500 fill-blue-500/20" />
+                      <span className="flex items-center gap-1">
+                        <BadgeCheck className="h-5 w-5 text-blue-500 fill-blue-500/20" />
+                        <span className="text-blue-400 text-sm" title="Tài khoản đã xác minh">💎</span>
+                      </span>
                     )}
                   </h1>
                   <span className="inline-flex items-center rounded-full bg-blue-500/10 px-2.5 py-0.5 text-xs font-semibold text-blue-400 border border-blue-500/20">

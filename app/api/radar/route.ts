@@ -21,6 +21,15 @@ export async function GET() {
         is_premium: true,
         employerId: true,
         reviews: true,
+        priceRange: true,
+        isEmergency: true,
+        vehicleInfo: true,
+        workType: true,
+        employer: {
+          select: {
+            isVerified: true,
+          },
+        },
       },
     });
 

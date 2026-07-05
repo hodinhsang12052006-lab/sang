@@ -35,6 +35,7 @@ export async function GET(req: NextRequest) {
             avatarUrl: true,
             role: true,
             bio: true,
+            isVerified: true,
           },
         },
       },
@@ -71,7 +72,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { name, category, description, location, contactInfo } = body;
+    const { name, category, description, location, contactInfo, priceRange, vehicleInfo, isEmergency, workType } = body;
 
     if (!name || !category || !description || !location || !contactInfo) {
       return NextResponse.json(
@@ -91,6 +92,10 @@ export async function POST(req: Request) {
         city,
         contactInfo,
         ownerId: userId,
+        priceRange,
+        vehicleInfo,
+        isEmergency: !!isEmergency,
+        workType,
       },
       include: {
         owner: {

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Search, Upload, Bell, MessageSquare, Menu, Check, Trash2, ShieldAlert, Coins } from "lucide-react";
+import { Search, Upload, Bell, MessageSquare, Menu, Check, Trash2, ShieldAlert, Coins, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
@@ -178,8 +178,16 @@ export default function Navbar() {
           {sessionUser ? (
             <>
               <button
+                onClick={() => router.push("/jobs/create")}
+                className="flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-600 to-teal-650 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-emerald-600/25 hover:from-emerald-500 hover:to-teal-550 transition-all duration-200"
+              >
+                <Plus className="h-4 w-4" />
+                <span className="hidden sm:inline">Đăng tin</span>
+              </button>
+
+              <button
                 onClick={handleUploadCV}
-                className="flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-blue-600/25 hover:from-blue-500 hover:to-indigo-500 transition-all duration-200"
+                className="flex items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-650 px-4 py-2 text-xs font-semibold text-white shadow-lg shadow-blue-600/25 hover:from-blue-500 hover:to-indigo-550 transition-all duration-200"
               >
                 <Upload className="h-4 w-4" />
                 <span className="hidden sm:inline">Upload CV</span>

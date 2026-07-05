@@ -27,6 +27,16 @@ interface JobType {
   niche: string;
   latitude: number;
   longitude: number;
+  is_premium?: boolean;
+  employerId?: string;
+  reviews?: any[];
+  employer?: {
+    isVerified?: boolean;
+  };
+  priceRange?: string | null;
+  isEmergency?: boolean | null;
+  vehicleInfo?: string | null;
+  workType?: string | null;
 }
 
 export default function ExplorePage() {

@@ -10,6 +10,16 @@ export async function GET() {
     const jobs = await prisma.job.findMany({
       include: {
         reviews: true,
+        employer: {
+          select: {
+            id: true,
+            name: true,
+            avatarUrl: true,
+            isVerified: true,
+            reputation: true,
+            trustScore: true,
+          },
+        },
       },
       orderBy: [
         { isBoosted: "desc" },
@@ -47,7 +57,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { title, description, salary, companyName } = body;
+    const { title, description, salary, companyName, priceRange, vehicleInfo, isEmergency, workType } = body;
 
     if (!title || !description || !salary || !companyName) {
       return NextResponse.json(
@@ -63,6 +73,10 @@ export async function POST(req: Request) {
         salary,
         companyName,
         employerId: userId,
+        priceRange,
+        vehicleInfo,
+        isEmergency: !!isEmergency,
+        workType,
       },
     });
 

@@ -18,6 +18,13 @@ export interface JobType {
   createdAt: string;
   reviews?: any[];
   niche?: string;
+  priceRange?: string | null;
+  vehicleInfo?: string | null;
+  isEmergency?: boolean | null;
+  workType?: string | null;
+  employer?: {
+    isVerified?: boolean;
+  } | null;
 }
 
 interface JobBoardProps {
@@ -212,7 +219,12 @@ export default function JobBoard({ jobs: initialJobs }: JobBoardProps) {
                                 {job.title}
                               </h3>
                             </div>
-                            <p className="text-xs text-slate-400 truncate">{job.companyName}</p>
+                            <p className="text-xs text-slate-400 truncate flex items-center gap-1">
+                              <span>{job.companyName}</span>
+                              {((job as any).employer?.isVerified || (job as any).owner?.isVerified) && (
+                                <span className="text-blue-400" title="Tài khoản đã xác minh">💎</span>
+                              )}
+                            </p>
                           </div>
                         </>
                       );
@@ -235,6 +247,26 @@ export default function JobBoard({ jobs: initialJobs }: JobBoardProps) {
                       <DollarSign className="h-3.5 w-3.5 text-emerald-400" />
                       <span className="text-emerald-400 font-semibold">{job.salary}</span>
                     </span>
+                    {job.priceRange && (
+                      <span className="flex items-center gap-1 text-slate-350">
+                        <span className="bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700 text-4xs">💰 Giá: {job.priceRange}</span>
+                      </span>
+                    )}
+                    {((job as any).isEmergency || (job as any).is_emergency) && (
+                      <span className="inline-flex items-center rounded bg-rose-500/20 px-1.5 py-0.5 text-[9px] font-extrabold text-rose-400 border border-rose-500/35 uppercase tracking-wider animate-pulse">
+                        🚨 Hỗ trợ 24/7
+                      </span>
+                    )}
+                    {((job as any).vehicleInfo || (job as any).vehicle_info) && (
+                      <span className="inline-flex items-center rounded bg-sky-500/20 px-1.5 py-0.5 text-[9px] font-bold text-sky-400 border border-sky-500/35 uppercase">
+                        🚗 Xe: {(job as any).vehicleInfo || (job as any).vehicle_info}
+                      </span>
+                    )}
+                    {((job as any).workType || (job as any).work_type) && (
+                      <span className="inline-flex items-center rounded bg-purple-500/20 px-1.5 py-0.5 text-[9px] font-bold text-purple-400 border border-purple-500/35 uppercase">
+                        ⏱️ {(job as any).workType || (job as any).work_type}
+                      </span>
+                    )}
                     <span className="flex items-center gap-1">
                       <MapPin className="h-3.5 w-3.5 text-slate-500" />
                       <span>{job.location || "Từ xa (Remote)"}</span>

@@ -17,8 +17,18 @@ interface ServiceType {
   rating?: number;
   ownerId: string;
   isBoosted?: boolean;
+  priceRange?: string | null;
+  vehicleInfo?: string | null;
+  isEmergency?: boolean | null;
+  workType?: string | null;
   owner?: {
+    id: string;
     name: string;
+    email: string;
+    avatarUrl?: string | null;
+    role: string;
+    bio?: string | null;
+    isVerified?: boolean;
   } | null;
 }
 
@@ -251,9 +261,12 @@ export default function ServicesPage() {
                               )}
                               <h3
                                 onClick={() => router.push(`/services/${srv.id}`)}
-                                className="text-xs sm:text-sm font-bold text-slate-200 hover:text-blue-400 cursor-pointer"
+                                className="text-xs sm:text-sm font-bold text-slate-200 hover:text-blue-400 cursor-pointer flex items-center gap-1"
                               >
-                                {srv.name}
+                                <span>{srv.name}</span>
+                                {srv.owner?.isVerified && (
+                                  <span className="text-blue-400" title="Tài khoản đã xác minh">💎</span>
+                                )}
                               </h3>
                             </div>
                             <span className="inline-block mt-0.5 text-3xs font-semibold text-slate-400">
@@ -266,6 +279,30 @@ export default function ServicesPage() {
                         <div className="flex items-center gap-1 rounded bg-amber-500/10 px-1.5 py-0.5 border border-amber-500/15">
                           <span className="text-3xs font-bold text-amber-500">★ {srv.rating}</span>
                         </div>
+                      </div>
+
+                      {/* Extra specs */}
+                      <div className="flex flex-wrap gap-1 text-[9px]">
+                        {srv.priceRange && (
+                          <span className="bg-slate-800 text-slate-200 px-1.5 py-0.5 rounded border border-slate-700">
+                            💰 Giá: {srv.priceRange}
+                          </span>
+                        )}
+                        {srv.isEmergency && (
+                          <span className="bg-rose-500/20 text-rose-400 px-1.5 py-0.5 rounded border border-rose-500/35 font-extrabold uppercase animate-pulse">
+                            🚨 Hỗ trợ 24/7
+                          </span>
+                        )}
+                        {srv.vehicleInfo && (
+                          <span className="bg-sky-500/20 text-sky-400 px-1.5 py-0.5 rounded border border-sky-500/35 font-semibold">
+                            🚗 Xe: {srv.vehicleInfo}
+                          </span>
+                        )}
+                        {srv.workType && (
+                          <span className="bg-purple-500/20 text-purple-400 px-1.5 py-0.5 rounded border border-purple-500/35 font-semibold">
+                            ⏱️ {srv.workType}
+                          </span>
+                        )}
                       </div>
 
                       <p className="text-2xs sm:text-xs leading-relaxed text-slate-350 line-clamp-3">

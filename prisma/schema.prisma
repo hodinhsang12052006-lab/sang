@@ -85,6 +85,10 @@ model Job {
   longitude    Float?
   ai_tags      String?
   reviews      Review[]
+  priceRange   String?       // Pricing estimations
+  vehicleInfo  String?       // Plate number and car model
+  isEmergency  Boolean       @default(false) // 24/7 service emergency badge
+  workType     String?       // full-time, hourly, etc.
   createdAt    DateTime      @default(now())
 }
 
@@ -98,6 +102,9 @@ model Service {
   contactInfo String
   imageUrl    String?  // Real Cloudinary image URL
   priceRange  String?  // Pricing estimations
+  vehicleInfo String?  // Plate number and car model
+  isEmergency Boolean  @default(false) // 24/7 service emergency badge
+  workType    String?  // full-time, hourly, etc.
   rating      Float    @default(5.0)
   ownerId     String
   owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
