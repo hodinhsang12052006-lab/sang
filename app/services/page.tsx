@@ -45,30 +45,12 @@ interface ServiceType {
   } | null;
 }
 
-const MOCK_AVATARS = [
-  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=150&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&auto=format&fit=crop&q=80"
-];
-
-const mockNames = [
-  { name: "Tiệm sửa xe Thành Đạt", spec: "Sửa xe ga, vá lốp lưu động", phone: "0909 333 444", rating: 4.8, icon: "🛠️", avatar: MOCK_AVATARS[0], niche: "Sửa chữa", distance: "Cách bạn 1.2km", tags: ["Sửa xe", "Cứu hộ", "24/7"], isOpen: true, address: "120 Trần Hưng Đạo, Hải Châu, Đà Nẵng", hours: "07:00 - 23:00" },
-  { name: "Vệ sinh máy lạnh 24h", spec: "Rửa máy lạnh, nạp gas giá rẻ", phone: "0911 555 666", rating: 4.9, icon: "❄️", avatar: MOCK_AVATARS[1], niche: "Gia đình", distance: "Cách bạn 800m", tags: ["Điện lạnh", "Vệ sinh"], isOpen: true, address: "45 Lê Lợi, Thạch Thang, Đà Nẵng", hours: "08:00 - 22:00" },
-  { name: "Quán phở gia truyền Hà Nội", spec: "Phở bò chín/tái thơm ngon", phone: "0922 777 888", rating: 4.7, icon: "🍜", avatar: MOCK_AVATARS[2], niche: "F&B", distance: "Cách bạn 1.5km", tags: ["Ăn uống", "Phở bò"], isOpen: true, address: "88 Nguyễn Văn Linh, Nam Dương, Đà Nẵng", hours: "06:00 - 22:00" },
-  { name: "Spa & Nail Thùy Lâm", spec: "Làm nail, chăm sóc da mặt chuyên sâu", phone: "0933 999 111", rating: 5.0, icon: "💅", avatar: MOCK_AVATARS[3], niche: "Spa", distance: "Cách bạn 600m", tags: ["Nail", "Làm đẹp"], isOpen: false, address: "210 Hùng Vương, Hải Châu 2, Đà Nẵng", hours: "09:00 - 20:00" },
-  { name: "Cơm tấm bãi rác Q4", spec: "Sườn bì chả nướng than thơm phức", phone: "0944 222 333", rating: 4.6, icon: "🍛", avatar: MOCK_AVATARS[4], niche: "F&B", distance: "Cách bạn 2km", tags: ["Ăn sáng", "Cơm tấm"], isOpen: true, address: "55 Điện Biên Phủ, Chính Gián, Đà Nẵng", hours: "06:00 - 13:00" },
-  { name: "Grab Đội Giao Hàng Siêu Tốc", spec: "Chạy ship, giao tài liệu khẩn cấp", phone: "0955 888 999", rating: 4.9, icon: "🛵", avatar: MOCK_AVATARS[5], niche: "Vận tải", distance: "Cách bạn 500m", tags: ["Giao hàng", "Xe ôm"], isOpen: true, address: "320 Núi Thành, Hòa Cường Bắc, Đà Nẵng", hours: "Hoạt động 24/7" },
-  { name: "Điện nước dân dụng Bách Khoa", spec: "Sửa chập điện, ống nước rò rỉ", phone: "0966 111 222", rating: 4.8, icon: "⚡", avatar: MOCK_AVATARS[6], niche: "Gia đình", distance: "Cách bạn 1.8km", tags: ["Điện nước", "Sửa chữa"], isOpen: true, address: "142 Ông Ích Khiêm, Thanh Bình, Đà Nẵng", hours: "08:00 - 18:00" },
-  { name: "Cắt tóc nam barber shop", spec: "Tạo kiểu undercut, cạo râu", phone: "0977 444 555", rating: 4.7, icon: "✂️", avatar: MOCK_AVATARS[7], niche: "Spa", distance: "Cách bạn 1km", tags: ["Cắt tóc", "Salon"], isOpen: true, address: "99 Hoàng Diệu, Phước Ninh, Đà Nẵng", hours: "09:00 - 21:00" },
-  { name: "Thú y Pet Clinic & Spa", spec: "Khám chữa bệnh, tỉa lông thú cưng", phone: "0988 666 777", rating: 4.9, icon: "🐶", avatar: MOCK_AVATARS[8], niche: "Spa", distance: "Cách bạn 2.3km", tags: ["Thú cưng", "Bác sĩ"], isOpen: true, address: "78 Phan Đăng Lưu, Hòa Cường Nam, Đà Nẵng", hours: "08:00 - 20:00" },
-  { name: "Trà sữa DingTea & Snacks", spec: "Trà sữa trân châu, khoai tây chiên", phone: "0999 888 111", rating: 4.5, icon: "🧋", avatar: MOCK_AVATARS[9], niche: "F&B", distance: "Cách bạn 1.1km", tags: ["Trà sữa", "Ăn vặt"], isOpen: false, address: "12 Bạch Đằng, Thạch Thang, Đà Nẵng", hours: "09:00 - 22:30" }
+const MOCK_SERVICES = [
+  { id: 1, name: "Sửa xe máy 24/7 Anh Tuấn", category: "Sửa chữa", lat: 12.245, lng: 109.195, rating: 4.8, address: "Đường 2/4, Vĩnh Hải", tags: ["Sửa xe", "Cứu hộ"], status: "Đang mở cửa", ai_desc: "Phù hợp 98% - Thợ lành nghề, đang rảnh việc gần bạn." },
+  { id: 2, name: "Vệ Sinh Máy Lạnh Chớp Nhoáng", category: "Điện lạnh", lat: 12.238, lng: 109.198, rating: 4.9, address: "Trần Phú, Lộc Thọ", tags: ["Vệ sinh", "Bơm gas"], status: "Đang mở cửa", ai_desc: "Phù hợp 95% - Đánh giá cao nhất khu vực." },
+  { id: 3, name: "Cơm Tấm Sườn Bì Chả Cô Ba", category: "F&B", lat: 12.252, lng: 109.190, rating: 4.7, address: "Lê Hồng Phong, Phước Hải", tags: ["Ăn uống", "Ngon"], status: "Đang mở cửa", ai_desc: "Đề xuất - Quán ăn được yêu thích." },
+  { id: 4, name: "Cứu Hộ Ô Tô Xuyên Đêm", category: "Vận tải", lat: 12.260, lng: 109.200, rating: 5.0, address: "Phạm Văn Đồng", tags: ["Cẩu xe", "Kéo xe"], status: "24/24", ai_desc: "Khẩn cấp - Có mặt sau 15 phút." },
+  { id: 5, name: "Spa Thú Cưng PawCare", category: "Thú cưng", lat: 12.230, lng: 109.185, rating: 4.6, address: "Thái Nguyên", tags: ["Tắm chó", "Cắt tỉa"], status: "Đóng cửa lúc 22:00", ai_desc: "Đề xuất - Dịch vụ chuẩn 5 sao." }
 ];
 
 export default function ServicesPage() {
@@ -84,17 +66,17 @@ export default function ServicesPage() {
   // AI assistant queries state
   const [aiQuery, setAiQuery] = useState("");
 
-  // Map center and zoom synchronized states
-  const [center, setCenter] = useState<[number, number]>([16.0471, 108.2062]);
-  const [zoom, setZoom] = useState<number>(6);
-  const [mockList, setMockList] = useState<any[]>([]);
+  // Map center, zoom and active flyTo location synchronized states
+  const [center, setCenter] = useState<[number, number]>([12.245, 109.195]);
+  const [zoom, setZoom] = useState<number>(14);
+  const [activeLocation, setActiveLocation] = useState<[number, number] | null>(null);
 
   const categories = [
     { id: "all", label: "Tất cả ngành" },
     { id: "Vận tải", label: "🛵 Vận tải" },
     { id: "Sửa chữa", label: "🛠️ Sửa chữa" },
-    { id: "Gia đình", label: "🧹 Gia đình" },
-    { id: "Spa", label: "💅 Spa & Nail" },
+    { id: "Điện lạnh", label: "❄️ Điện lạnh" },
+    { id: "Thú cưng", label: "🐶 Thú cưng" },
     { id: "F&B", label: "☕ F&B" },
   ];
 
@@ -122,52 +104,6 @@ export default function ServicesPage() {
       );
     }
   }, []);
-
-  // Generate 10 mock services dynamically around the GPS coordinates center
-  useEffect(() => {
-    if (center && mockList.length === 0) {
-      const [lat, lng] = center;
-      const offsets = [
-        [0.003, -0.005],
-        [-0.004, 0.006],
-        [0.006, 0.004],
-        [-0.007, -0.003],
-        [0.002, 0.009],
-        [-0.005, -0.008],
-        [0.008, -0.006],
-        [-0.002, 0.005],
-        [0.005, -0.002],
-        [-0.009, 0.008],
-      ];
-
-      const generated = mockNames.map((item, idx) => {
-        const offset = offsets[idx % offsets.length];
-        const matchPercent = 95 + (idx % 5);
-        return {
-          id: `mock-radar-${idx}`,
-          title: item.spec,
-          companyName: item.name,
-          salary: "Liên hệ thỏa thuận",
-          niche: item.niche,
-          latitude: lat + offset[0],
-          longitude: lng + offset[1],
-          is_premium: idx % 3 === 0,
-          employerId: "self",
-          rating: item.rating,
-          phone: item.phone,
-          avatarUrl: item.avatar,
-          distance: item.distance,
-          isMock: true,
-          tags: item.tags,
-          isOpen: item.isOpen,
-          address: item.address,
-          hours: item.hours,
-          aiRecommendation: `Phù hợp ${matchPercent}% • ${item.rating}⭐ trên Google Maps • ${item.distance}`
-        };
-      });
-      setMockList(generated);
-    }
-  }, [center, mockList]);
 
   // Load session user info
   useEffect(() => {
@@ -222,6 +158,32 @@ export default function ServicesPage() {
     }
     toast.success(`AI: Đang tìm dịch vụ tốt nhất cho "${aiQuery}"...`);
   };
+
+  // Convert MOCK_SERVICES list to unified structure
+  const mockList = MOCK_SERVICES.map((item) => {
+    const isSpecialPremium = item.rating >= 4.9;
+    return {
+      id: `mock-radar-${item.id}`,
+      title: item.ai_desc,
+      companyName: item.name,
+      salary: "Liên hệ thỏa thuận",
+      niche: item.category,
+      latitude: item.lat,
+      longitude: item.lng,
+      is_premium: isSpecialPremium,
+      employerId: "self",
+      rating: item.rating,
+      phone: "0909 123 456",
+      avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(item.name)}&background=${isSpecialPremium ? "d97706" : "2563eb"}&color=ffffff&bold=true`,
+      distance: item.id === 1 ? "Cách bạn 1.2km" : item.id === 2 ? "Cách bạn 800m" : item.id === 3 ? "Cách bạn 1.5km" : item.id === 4 ? "Cách bạn 2.0km" : "Cách bạn 2.3km",
+      isMock: true,
+      tags: item.tags,
+      isOpen: item.status.includes("mở cửa") || item.status.includes("24/24"),
+      address: item.address,
+      hours: item.status,
+      aiRecommendation: item.ai_desc
+    };
+  });
 
   // Merge database records with mocks list
   const allLocations = [
@@ -371,7 +333,7 @@ export default function ServicesPage() {
               {loading && services.length === 0 ? (
                 <div className="flex flex-col items-center justify-center p-8 space-y-2">
                   <Loader2 className="h-6 w-6 text-blue-500 animate-spin" />
-                  <p className="text-4xs text-slate-550">Đang tải danh bạ...</p>
+                  <p className="text-4xs text-slate-555">Đang tải danh bạ...</p>
                 </div>
               ) : error ? (
                 <div className="p-4 rounded-xl border border-red-500/20 bg-red-500/5 text-[11px] text-red-400">
@@ -440,9 +402,7 @@ export default function ServicesPage() {
                     <div className="flex gap-1.5 border-t border-slate-850/60 pt-2.5 mt-0.5">
                       <button
                         onClick={() => {
-                          setCenter([loc.latitude, loc.longitude]);
-                          setZoom(16);
-                          toast.success(`📍 Đang di chuyển bản đồ tới: ${loc.companyName}`);
+                          setActiveLocation([loc.latitude, loc.longitude]);
                         }}
                         className="flex-1 py-1 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-900 text-slate-300 hover:text-white transition-all text-center text-4xs font-bold cursor-pointer"
                       >
@@ -458,7 +418,7 @@ export default function ServicesPage() {
                   </div>
                 ))
               ) : (
-                <div className="text-center py-12 border border-dashed border-slate-850 rounded-xl bg-slate-900/10 text-slate-500 text-4xs">
+                <div className="text-center py-12 border border-dashed border-slate-855 rounded-xl bg-slate-900/10 text-slate-500 text-4xs">
                   Không tìm thấy thợ hoặc dịch vụ nào phù hợp.
                 </div>
               )}
@@ -471,6 +431,7 @@ export default function ServicesPage() {
               jobs={filteredLocations}
               center={center}
               zoom={zoom}
+              activeLocation={activeLocation}
             />
           </div>
 

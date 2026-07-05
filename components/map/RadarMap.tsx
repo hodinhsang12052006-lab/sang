@@ -34,6 +34,7 @@ interface RadarMapProps {
   onLocationFound?: (lat: number, lng: number) => void;
   center?: [number, number];
   zoom?: number;
+  activeLocation?: [number, number] | null;
 }
 
 function ChangeView({ center, zoom }: { center: [number, number]; zoom: number }) {
@@ -41,6 +42,16 @@ function ChangeView({ center, zoom }: { center: [number, number]; zoom: number }
   useEffect(() => {
     map.flyTo(center, zoom, { duration: 1.5 });
   }, [center, zoom, map]);
+  return null;
+}
+
+function ActiveLocationFlyer({ activeLocation }: { activeLocation: [number, number] | null }) {
+  const map = useMap();
+  useEffect(() => {
+    if (activeLocation) {
+      map.flyTo(activeLocation, 16, { duration: 1.5 });
+    }
+  }, [activeLocation, map]);
   return null;
 }
 
@@ -70,7 +81,7 @@ const mockNames = [
   { name: "Trà sữa DingTea & Snacks", spec: "Trà sữa trân châu, khoai tây chiên", phone: "0999 888 111", rating: 4.5, icon: "🧋", avatar: MOCK_AVATARS[9] }
 ];
 
-export default function RadarMap({ jobs, onLocationFound, center: propsCenter, zoom: propsZoom }: RadarMapProps) {
+export default function RadarMap({ jobs, onLocationFound, center: propsCenter, zoom: propsZoom, activeLocation }: RadarMapProps) {
   const [center, setCenter] = useState<[number, number]>(propsCenter || [16.0471, 108.2062]);
   const [zoom, setZoom] = useState<number>(propsZoom || 6);
   const [isMounted, setIsMounted] = useState(false);
@@ -212,6 +223,7 @@ export default function RadarMap({ jobs, onLocationFound, center: propsCenter, z
         className="h-full w-full"
       >
         <ChangeView center={center} zoom={zoom} />
+        <ActiveLocationFlyer activeLocation={activeLocation || null} />
         
         {/* CartoDB Voyager Tile Layer - Premium bright street layout styled like Grab */}
         <TileLayer
