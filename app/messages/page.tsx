@@ -10,9 +10,6 @@ import {
 import { useSearchParams } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { getPusherClient } from "@/lib/pusher";
-import dynamicImport from "next/dynamic";
-
-const EmojiPicker = dynamicImport(() => import("emoji-picker-react"), { ssr: false });
 
 interface UserType {
   id: string;
@@ -149,6 +146,20 @@ const MOCK_STICKERS = [
   { emoji: "⭐", label: "5 Sao" }
 ];
 
+const POPULAR_EMOJIS = [
+  "😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊", "😇",
+  "🙂", "🙃", "😉", "😌", "😍", "🥰", "😘", "😗", "😙", "😚",
+  "😋", "😛", "😝", "😜", "🤪", "🤨", "🧐", "🤓", "😎", "🤩",
+  "🥳", "😏", "😒", "😞", "😔", "😟", "😕", "🙁", "☹️", "😣",
+  "😖", "😫", "😩", "🥺", "😢", "😭", "😤", "😠", "😡", "🤬",
+  "🤯", "😳", "🥵", "🥶", "😱", "😨", "😰", "😥", "😓", "🤗",
+  "🤔", "🤭", "🤫", "🤥", "😶", "😐", "😑", "😬", "🙄", "😯",
+  "✍️", "👍", "👎", "👊", "✊", "🤛", "🤜", "🤝", "👏", "🙌",
+  "👐", "🤲", "🙏", "💅", "🤳", "💪", "🦾", "🦿", "❤️", "🧡",
+  "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎", "💔", "🔥", "✨",
+  "🌟", "⭐", "🎉", "🎈", "🚀", "💡", "💯", "💬", "🔒", "⚡"
+];
+
 function MessengerContent() {
   const searchParams = useSearchParams();
   const searchUserId = searchParams.get("userId");
@@ -195,6 +206,14 @@ function MessengerContent() {
   const [callType, setCallType] = useState<"audio" | "video">("audio");
   const [micMuted, setMicMuted] = useState(false);
   const [videoOff, setVideoOff] = useState(false);
+
+  // Local Chat Bubble Reactions State for Phase 67
+  const [messageReactions, setMessageReactions] = useState<{[messageId: string]: string[]}>({
+    "mg-1-1": ["👍", "❤️"],
+    "m-1-1": ["👍"],
+    "m-1-3": ["❤️"],
+    "mg-2-1": ["🚀", "🔥"]
+  });
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -598,6 +617,23 @@ function MessengerContent() {
     });
   };
 
+  // Add / Toggle reactions state locally for Phase 67
+  const handleAddReaction = (msgId: string, emoji: string) => {
+    setMessageReactions((prev) => {
+      const existing = prev[msgId] || [];
+      if (existing.includes(emoji)) {
+        return {
+          ...prev,
+          [msgId]: existing.filter((e) => e !== emoji)
+        };
+      }
+      return {
+        ...prev,
+        [msgId]: [...existing, emoji]
+      };
+    });
+  };
+
   const getChatConversations = () => {
     if (!currentUser) return { dbList: [], mockList: [] };
     
@@ -657,7 +693,7 @@ function MessengerContent() {
 
   if (loading && messages.length === 0) {
     return (
-      <div className="flex flex-col min-h-screen bg-slate-950 text-slate-100">
+      <div className="flex flex-col min-h-screen bg-slate-950 text-slate-100 animate-pulse">
         <Navbar />
         <main className="mx-auto flex-1 w-full max-w-7xl px-4 py-12 flex flex-col items-center justify-center space-y-3">
           <Loader2 className="h-8 w-8 text-blue-500 animate-spin" />
@@ -978,33 +1014,48 @@ function MessengerContent() {
                               />
                             </div>
                           )}
-                          <div className="flex flex-col max-w-[70%] relative">
+                          <div className="flex flex-col max-w-[70%] relative pb-1">
                             {activeChat.isGroup && !isSelf && (
                               <span className="text-5xs text-slate-500 mb-0.5 ml-1">{msg.sender?.name}</span>
                             )}
                             
-                            {/* Sticker vs Regular Bubble Rendering */}
-                            {msg.type === "STICKER" ? (
-                              <div className="text-5xl my-2 select-none transform hover:scale-110 active:scale-95 transition-all cursor-pointer animate-fadeIn" title="Telegram Sticker">
-                                {msg.content}
-                              </div>
-                            ) : (
-                              <div
-                                className={`rounded-2xl px-4 py-2 text-xs leading-relaxed break-words relative ${
-                                  isSelf
-                                    ? "bg-blue-600 text-white rounded-br-none shadow-md shadow-blue-650/10"
-                                    : "bg-slate-900 border border-slate-850 text-slate-200 rounded-bl-none"
-                                }`}
-                              >
-                                {msg.type === "IMAGE" ? (
-                                  <img src={msg.content} alt="Media Attachment" className="max-w-full rounded-lg object-contain max-h-60" />
-                                ) : msg.type === "VIDEO" ? (
-                                  <video src={msg.content} controls className="max-w-full rounded-lg max-h-60" poster="/cho1.jpg" />
-                                ) : (
-                                  <p>{msg.content}</p>
-                                )}
-                              </div>
-                            )}
+                            {/* Sticker vs Regular Bubble Rendering inside a relative wrap */}
+                            <div className="relative">
+                              {msg.type === "STICKER" ? (
+                                <div className="text-5xl my-2 select-none transform hover:scale-115 hover:-rotate-3 active:scale-95 transition-all cursor-pointer animate-fadeIn" title="Telegram Sticker">
+                                  {msg.content}
+                                </div>
+                              ) : (
+                                <div
+                                  className={`rounded-2xl px-4 py-2 text-xs leading-relaxed break-words relative ${
+                                    isSelf
+                                      ? "bg-blue-600 text-white rounded-br-none shadow-md shadow-blue-650/10"
+                                      : "bg-slate-900 border border-slate-850 text-slate-200 rounded-bl-none"
+                                  }`}
+                                >
+                                  {msg.type === "IMAGE" ? (
+                                    <img src={msg.content} alt="Media Attachment" className="max-w-full rounded-lg object-contain max-h-60" />
+                                  ) : msg.type === "VIDEO" ? (
+                                    <video src={msg.content} controls className="max-w-full rounded-lg max-h-60" poster="/cho1.jpg" />
+                                  ) : (
+                                    <p>{msg.content}</p>
+                                  )}
+                                </div>
+                              )}
+
+                              {/* Render Reactions directly overlapping the bubble corner for Phase 67 */}
+                              {messageReactions[msg.id] && messageReactions[msg.id].length > 0 && (
+                                <div 
+                                  onClick={() => setMessageReactions(prev => ({ ...prev, [msg.id]: [] }))}
+                                  className={`absolute -bottom-2.5 ${isSelf ? "left-2" : "right-2"} bg-slate-900 border border-slate-800 rounded-full px-1.5 py-0.5 text-[9px] flex items-center gap-0.5 shadow-lg z-20 select-none animate-fadeIn cursor-pointer hover:bg-slate-800 transition-colors`}
+                                  title="Nhấp để xóa cảm xúc"
+                                >
+                                  {messageReactions[msg.id].map((emoji, idx) => (
+                                    <span key={idx} className="hover:scale-120 transition-transform duration-100">{emoji}</span>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
 
                             {/* Floating Toolbar on Hover */}
                             <div className={`absolute -top-7 ${isSelf ? "right-0" : "left-0"} flex items-center gap-1 bg-slate-900/95 border border-slate-800 rounded-lg px-2 py-0.5 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-30 backdrop-blur-sm`}>
@@ -1014,7 +1065,7 @@ function MessengerContent() {
                                   <button
                                     key={emoji}
                                     type="button"
-                                    onClick={() => toast.success(`Bạn đã thả cảm xúc ${emoji} tin nhắn!`)}
+                                    onClick={() => handleAddReaction(msg.id, emoji)}
                                     className="hover:scale-125 transition-transform text-2xs cursor-pointer"
                                   >
                                     {emoji}
@@ -1099,14 +1150,20 @@ function MessengerContent() {
                     </div>
 
                     <div className="flex-1 overflow-y-auto custom-scrollbar">
+                      {/* Telegram-style Emoji Grid for Phase 67 */}
                       {chatPanelTab === "emoji" && (
-                        <EmojiPicker
-                          onEmojiClick={(emojiData) => {
-                            setMessageText((prev) => prev + emojiData.emoji);
-                          }}
-                          width="100%"
-                          height="100%"
-                        />
+                        <div className="grid grid-cols-8 sm:grid-cols-10 gap-3 p-2 h-full overflow-y-auto custom-scrollbar select-none">
+                          {POPULAR_EMOJIS.map((emoji, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              onClick={() => setMessageText((prev) => prev + emoji)}
+                              className="text-2xl p-2 rounded-xl hover:bg-slate-900 hover:scale-125 active:scale-95 transition-transform duration-200 cursor-pointer text-center flex items-center justify-center"
+                            >
+                              {emoji}
+                            </button>
+                          ))}
+                        </div>
                       )}
 
                       {chatPanelTab === "sticker" && (
@@ -1118,7 +1175,7 @@ function MessengerContent() {
                                 handleSendMessage(null, stk.emoji, "STICKER");
                                 setShowEmoji(false);
                               }}
-                              className="hover:scale-115 hover:-rotate-3 active:scale-95 transition-all duration-150 cursor-pointer p-3 bg-slate-900 border border-slate-800 rounded-xl flex flex-col items-center justify-center gap-1.5 shadow-md select-none hover:shadow-indigo-500/10 hover:border-indigo-500/30"
+                              className="hover:scale-125 hover:-rotate-3 active:scale-95 transition-all duration-300 cursor-pointer p-3 bg-slate-900 border border-slate-800 rounded-xl flex flex-col items-center justify-center gap-1.5 shadow-md select-none hover:shadow-indigo-500/10 hover:border-indigo-500/30"
                             >
                               <span className="text-4xl animate-bounce" style={{ animationDuration: "2s" }}>{stk.emoji}</span>
                               <span className="text-[9px] text-slate-500 tracking-wider font-semibold uppercase">{stk.label}</span>
@@ -1134,7 +1191,7 @@ function MessengerContent() {
                             placeholder="Nhập từ khóa tìm kiếm GIF..."
                             value={gifSearch}
                             onChange={(e) => setGifSearch(e.target.value)}
-                            className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-200 placeholder-slate-550 focus:outline-none"
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 placeholder-slate-550 focus:outline-none"
                           />
                           {loadingGifs ? (
                             <div className="flex-1 flex items-center justify-center">
@@ -1174,10 +1231,10 @@ function MessengerContent() {
                           setShowGifs(false);
                           setShowAttachmentMenu(false);
                         }}
-                        className={`p-1.5 rounded-lg hover:bg-slate-900 text-slate-400 hover:text-white transition-all cursor-pointer ${showEmoji ? "bg-slate-900 text-blue-400" : ""}`}
+                        className={`p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-all duration-300 cursor-pointer ${showEmoji ? "bg-slate-900 text-blue-400" : ""}`}
                         title="Chèn biểu tượng, nhãn dán, GIF"
                       >
-                        <Smile className="h-4.5 w-4.5" />
+                        <Smile className="h-5 w-5" />
                       </button>
 
                       {/* File Attach Trigger (Images / Videos / Files) */}
@@ -1189,10 +1246,10 @@ function MessengerContent() {
                             setShowEmoji(false);
                             setShowGifs(false);
                           }}
-                          className={`p-1.5 rounded-lg hover:bg-slate-900 text-slate-400 hover:text-white transition-all cursor-pointer ${showAttachmentMenu ? "bg-slate-900 text-blue-450" : ""}`}
+                          className={`p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-all duration-300 cursor-pointer ${showAttachmentMenu ? "bg-slate-900 text-blue-450" : ""}`}
                           title="Đính kèm tệp tin"
                         >
-                          <Paperclip className="h-4.5 w-4.5" />
+                          <Paperclip className="h-5 w-5" />
                         </button>
                         
                         {showAttachmentMenu && (
@@ -1244,10 +1301,10 @@ function MessengerContent() {
                       <button
                         type="button"
                         onClick={() => toast.success("🎤 Chức năng ghi âm thoại đang được giả lập...")}
-                        className="p-1.5 rounded-lg hover:bg-slate-900 text-slate-400 hover:text-white transition-all cursor-pointer"
+                        className="p-2 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-900 transition-all duration-300 cursor-pointer"
                         title="Ghi âm giọng nói (Voice)"
                       >
-                        <Mic className="h-4.5 w-4.5" />
+                        <Mic className="h-5 w-5" />
                       </button>
 
                       <input
@@ -1262,7 +1319,7 @@ function MessengerContent() {
                     <button
                       type="button"
                       onClick={() => toast.success("⚡ Mở bảng chấm công & Thống kê HR dự án...")}
-                      className="flex items-center gap-1 px-3 py-1 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-555 text-white font-extrabold text-[10px] shadow-lg shadow-amber-500/10 cursor-pointer transition-all hover:scale-105 duration-300"
+                      className="flex items-center gap-1 px-3 py-1 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-555 text-white font-extrabold text-[10px] shadow-lg shadow-amber-500/10 cursor-pointer transition-all hover:scale-105 duration-305"
                       title="Công cụ quản trị chấm công HR"
                     >
                       <Zap className="h-3 w-3 fill-white" />
@@ -1420,7 +1477,7 @@ function MessengerContent() {
                   placeholder="Ví dụ: Đội xe ôm Q1, Tổ thợ sửa..."
                   value={groupName}
                   onChange={(e) => setGroupName(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 placeholder-slate-550 focus:outline-none"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 placeholder-slate-555 focus:outline-none"
                 />
               </div>
 
@@ -1505,7 +1562,7 @@ export default function MessengerPage() {
         <Navbar />
         <main className="mx-auto flex-1 w-full max-w-7xl px-4 py-12 flex flex-col items-center justify-center space-y-3">
           <Loader2 className="h-8 w-8 text-blue-500 animate-spin" />
-          <p className="text-xs text-slate-400">Đang khởi tạo khung chat...</p>
+          <p className="text-xs text-slate-400">Đang khởi tạo khu chat...</p>
         </main>
       </div>
     }>
