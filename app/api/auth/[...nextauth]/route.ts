@@ -7,6 +7,9 @@ import bcrypt from "bcryptjs";
 export const authOptions: NextAuthOptions & { trustHost?: boolean } = {
   trustHost: true,
   adapter: PrismaAdapter(prisma) as any,
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -69,9 +72,6 @@ export const authOptions: NextAuthOptions & { trustHost?: boolean } = {
     signIn: "/auth/login",
     newUser: "/auth/register",
     error: "/auth/error",
-  },
-  session: {
-    strategy: "jwt",
   },
   debug: true,
   secret: process.env.NEXTAUTH_SECRET || "pawbook_super_secret_key_2026_fixed_hardcode",
