@@ -56,11 +56,11 @@ export default function CustomAuthLayout({
           <div className="relative z-10 my-auto max-w-sm space-y-6">
             <h1 className="text-3xl font-extrabold tracking-tight text-white leading-tight">
               <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
-                Kiến Tạo Nền Kinh Tế Bản Địa Đột Phá
+                Nền Tảng Kết Nối Đa Dịch Vụ
               </span>
             </h1>
             <p className="text-sm leading-relaxed text-slate-400">
-              Trải nghiệm hệ sinh thái dịch vụ toàn diện. PawBook tiên phong kết nối hàng triệu người dùng với mạng lưới chuyên gia, đối tác vận tải và đối tác dịch vụ hàng đầu — cam kết 0% chiết khấu, tối ưu hóa giá trị cho toàn cộng đồng.
+              Giải pháp công nghệ toàn diện, kết nối trực tiếp nhu cầu của bạn với mạng lưới đối tác và chuyên gia trên toàn quốc thông qua thuật toán định vị thông minh.
             </p>
 
             <div className="space-y-6 pt-6">
@@ -69,8 +69,8 @@ export default function CustomAuthLayout({
                   <Sparkles className="h-4 w-4" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-extrabold text-slate-200">Vận Tải & Giao Nhận Trực Tiếp</h4>
-                  <p className="text-2xs text-slate-400 leading-relaxed mt-0.5">Trải nghiệm di chuyển thông minh với mạng lưới tài xế tự do. Chính sách 0% chiết khấu giúp tối đa hóa thu nhập đối tác và tiết kiệm chi phí cho bạn.</p>
+                  <h4 className="text-sm font-extrabold text-slate-200">Kết Nối Trực Tiếp & Tối Ưu</h4>
+                  <p className="text-2xs text-slate-400 leading-relaxed mt-0.5">Phá bỏ mọi rào cản trung gian. Công nghệ của chúng tôi tự động phân tích và kết nối bạn với đối tác phù hợp nhất trong thời gian thực.</p>
                 </div>
               </div>
 
@@ -79,8 +79,8 @@ export default function CustomAuthLayout({
                   <MessageSquareCode className="h-4 w-4" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-extrabold text-slate-200">Giải Pháp Tiện Ích Tận Nơi</h4>
-                  <p className="text-2xs text-slate-400 leading-relaxed mt-0.5">Từ sửa chữa chuyên sâu, vệ sinh không gian đến chăm sóc sức khỏe. Đặt lịch dễ dàng, mạng lưới chuyên gia uy tín có mặt ngay khi bạn cần.</p>
+                  <h4 className="text-sm font-extrabold text-slate-200">Hệ Sinh Thái Đa Dạng</h4>
+                  <p className="text-2xs text-slate-400 leading-relaxed mt-0.5">Một điểm chạm cho mọi nhu cầu. Từ tiện ích cá nhân đến giải pháp doanh nghiệp, nền tảng cung cấp một không gian số đồng bộ và linh hoạt.</p>
                 </div>
               </div>
 
@@ -89,8 +89,8 @@ export default function CustomAuthLayout({
                   <ShieldCheck className="h-4 w-4" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-extrabold text-slate-200">Hệ Sinh Thái Việc Làm Toàn Diện</h4>
-                  <p className="text-2xs text-slate-400 leading-relaxed mt-0.5">Xây dựng hồ sơ số, xác thực danh tính minh bạch. Tiếp cận hàng ngàn cơ hội phát triển sự nghiệp và mở rộng mạng lưới kinh doanh mỗi ngày.</p>
+                  <h4 className="text-sm font-extrabold text-slate-200">Bảo Mật & Xác Thực Uy Tín</h4>
+                  <p className="text-2xs text-slate-400 leading-relaxed mt-0.5">Hệ thống đánh giá đa chiều và quy trình xác thực danh tính minh bạch, đảm bảo tiêu chuẩn chất lượng và an toàn tuyệt đối cho mọi giao dịch.</p>
                 </div>
               </div>
             </div>
