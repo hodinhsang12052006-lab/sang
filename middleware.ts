@@ -20,6 +20,5 @@ export default withAuth(
 );
 
 export const config = {
-  // Routes to protect from unauthenticated users
-  matcher: ["/profile", "/hr-management", "/admin/:path*"],
+  matcher: ["/profile/:path*", "/admin/:path*"],
 };
