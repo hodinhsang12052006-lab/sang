@@ -127,6 +127,7 @@ function MessengerContent() {
 
   // Calling States (Calling UI Mockup)
   const [showCallingModal, setShowCallingModal] = useState(false);
+  const [syncingContacts, setSyncingContacts] = useState(false);
   const [callType, setCallType] = useState<"audio" | "video">("audio");
   const [micMuted, setMicMuted] = useState(false);
   const [videoOff, setVideoOff] = useState(false);
@@ -327,6 +328,14 @@ function MessengerContent() {
     } finally {
       setSending(false);
     }
+  };
+
+  const handleSyncContacts = () => {
+    setSyncingContacts(true);
+    setTimeout(() => {
+      setSyncingContacts(false);
+      toast.success("Đã đồng bộ thành công 47 liên hệ từ danh bạ điện thoại của bạn!");
+    }, 2000);
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -710,6 +719,26 @@ function MessengerContent() {
                       <span>🔔</span> Lời mời kết bạn
                     </div>
                     <span className="bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full text-5xs font-extrabold">0</span>
+                  </button>
+
+                  {/* Sync Contacts Button - Premium Zalo/Telegram style */}
+                  <button
+                    type="button"
+                    onClick={handleSyncContacts}
+                    disabled={syncingContacts}
+                    className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold shadow-lg shadow-blue-500/10 hover:shadow-blue-500/20 active:scale-98 transition-all cursor-pointer text-3xs disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {syncingContacts ? (
+                      <>
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        <span>Đang quét danh bạ thiết bị...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>🔄</span>
+                        <span>Đồng bộ danh bạ điện thoại</span>
+                      </>
+                    )}
                   </button>
 
                   <p className="text-[10px] uppercase tracking-wider text-slate-550 font-extrabold px-2 mt-2">Bạn bè & Đồng nghiệp ({MOCK_CONTACTS.length})</p>

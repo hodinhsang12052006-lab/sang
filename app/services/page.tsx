@@ -135,12 +135,72 @@ export default function ServicesPage() {
 
   const provinces = [
     { id: "all", label: "🌍 Toàn quốc" },
+    // 5 Central Municipalities
     { id: "TP. Hồ Chí Minh", label: "📍 TP. Hồ Chí Minh" },
     { id: "Hà Nội", label: "📍 Hà Nội" },
     { id: "Đà Nẵng", label: "📍 Đà Nẵng" },
     { id: "Cần Thơ", label: "📍 Cần Thơ" },
-    { id: "Nha Trang", label: "📍 Nha Trang" },
+    { id: "Hải Phòng", label: "📍 Hải Phòng" },
+    // 58 other provinces alphabetically
     { id: "An Giang", label: "📍 An Giang" },
+    { id: "Bà Rịa - Vũng Tàu", label: "📍 Bà Rịa - Vũng Tàu" },
+    { id: "Bắc Giang", label: "📍 Bắc Giang" },
+    { id: "Bắc Kạn", label: "📍 Bắc Kạn" },
+    { id: "Bạc Liêu", label: "📍 Bạc Liêu" },
+    { id: "Bắc Ninh", label: "📍 Bắc Ninh" },
+    { id: "Bến Tre", label: "📍 Bến Tre" },
+    { id: "Bình Định", label: "📍 Bình Định" },
+    { id: "Bình Dương", label: "📍 Bình Dương" },
+    { id: "Bình Phước", label: "📍 Bình Phước" },
+    { id: "Bình Thuận", label: "📍 Bình Thuận" },
+    { id: "Cà Mau", label: "📍 Cà Mau" },
+    { id: "Cao Bằng", label: "📍 Cao Bằng" },
+    { id: "Đắk Lắk", label: "📍 Đắk Lắk" },
+    { id: "Đắk Nông", label: "📍 Đắk Nông" },
+    { id: "Điện Biên", label: "📍 Điện Biên" },
+    { id: "Đồng Nai", label: "📍 Đồng Nai" },
+    { id: "Đồng Tháp", label: "📍 Đồng Tháp" },
+    { id: "Gia Lai", label: "📍 Gia Lai" },
+    { id: "Hà Giang", label: "📍 Hà Giang" },
+    { id: "Hà Nam", label: "📍 Hà Nam" },
+    { id: "Hà Tĩnh", label: "📍 Hà Tĩnh" },
+    { id: "Hải Dương", label: "📍 Hải Dương" },
+    { id: "Hậu Giang", label: "📍 Hậu Giang" },
+    { id: "Hòa Bình", label: "📍 Hòa Bình" },
+    { id: "Hưng Yên", label: "📍 Hưng Yên" },
+    { id: "Khánh Hòa", label: "📍 Khánh Hòa" },
+    { id: "Kiên Giang", label: "📍 Kiên Giang" },
+    { id: "Kon Tum", label: "📍 Kon Tum" },
+    { id: "Lai Châu", label: "📍 Lai Châu" },
+    { id: "Lâm Đồng", label: "📍 Lâm Đồng" },
+    { id: "Lạng Sơn", label: "📍 Lạng Sơn" },
+    { id: "Lào Cai", label: "📍 Lào Cai" },
+    { id: "Long An", label: "📍 Long An" },
+    { id: "Nam Định", label: "📍 Nam Định" },
+    { id: "Nghệ An", label: "📍 Nghệ An" },
+    { id: "Ninh Bình", label: "📍 Ninh Bình" },
+    { id: "Ninh Thuận", label: "📍 Ninh Thuận" },
+    { id: "Nha Trang", label: "📍 Nha Trang" },
+    { id: "Phú Thọ", label: "📍 Phú Thọ" },
+    { id: "Phú Yên", label: "📍 Phú Yên" },
+    { id: "Quảng Bình", label: "📍 Quảng Bình" },
+    { id: "Quảng Nam", label: "📍 Quảng Nam" },
+    { id: "Quảng Ngãi", label: "📍 Quảng Ngãi" },
+    { id: "Quảng Ninh", label: "📍 Quảng Ninh" },
+    { id: "Quảng Trị", label: "📍 Quảng Trị" },
+    { id: "Sóc Trăng", label: "📍 Sóc Trăng" },
+    { id: "Sơn La", label: "📍 Sơn La" },
+    { id: "Tây Ninh", label: "📍 Tây Ninh" },
+    { id: "Thái Bình", label: "📍 Thái Bình" },
+    { id: "Thái Nguyên", label: "📍 Thái Nguyên" },
+    { id: "Thanh Hóa", label: "📍 Thanh Hóa" },
+    { id: "Thừa Thiên Huế", label: "📍 Thừa Thiên Huế" },
+    { id: "Tiền Giang", label: "📍 Tiền Giang" },
+    { id: "Trà Vinh", label: "📍 Trà Vinh" },
+    { id: "Tuyên Quang", label: "📍 Tuyên Quang" },
+    { id: "Vĩnh Long", label: "📍 Vĩnh Long" },
+    { id: "Vĩnh Phúc", label: "📍 Vĩnh Phúc" },
+    { id: "Yên Bái", label: "📍 Yên Bái" }
   ];
 
   // Geolocation navigator to center on user
@@ -183,14 +243,13 @@ export default function ServicesPage() {
       "Hà Nội": [21.0285, 105.8542],
       "Đà Nẵng": [16.0471, 108.2062],
       "Cần Thơ": [10.0452, 105.7469],
+      "Hải Phòng": [20.8449, 106.6881],
       "Nha Trang": [12.2450, 109.1950],
       "An Giang": [10.3759, 105.4185]
     };
-    const newCenter = PROVINCE_CENTERS[selectedProvince];
-    if (newCenter) {
-      setCenter(newCenter);
-      setZoom(selectedProvince === "all" ? 6 : 14);
-    }
+    const newCenter = PROVINCE_CENTERS[selectedProvince] || [16.0471, 108.2062];
+    setCenter(newCenter);
+    setZoom(selectedProvince === "all" || !PROVINCE_CENTERS[selectedProvince] ? 6 : 14);
   }, [selectedProvince]);
 
   // Load both static merged stores and dynamic registered services
