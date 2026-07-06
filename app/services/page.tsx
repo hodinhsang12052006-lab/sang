@@ -355,8 +355,8 @@ export default function ServicesPage() {
                   />
                 </div>
 
-                {/* Main Groups (Horizontal Scrollable) */}
-                <div className="flex overflow-x-auto whitespace-nowrap gap-2 pb-2 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] border-b border-slate-850/60">
+                {/* Main Groups (Flex Wrap) */}
+                <div className="flex flex-wrap gap-2 pb-2 border-b border-slate-850/60">
                   <button
                     onClick={() => {
                       setSelectedGroup("all");
