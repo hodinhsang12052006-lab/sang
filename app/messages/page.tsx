@@ -131,8 +131,16 @@ function MessengerContent() {
   const [callSeconds, setCallSeconds] = useState(0);
   const [micMuted, setMicMuted] = useState(false);
   const [videoOff, setVideoOff] = useState(false);
-  const [contacts, setContacts] = useState<any[]>([]);
+  const [contacts, setContacts] = useState<any[]>([
+    { id: "mock-contact-1", name: "Nguyễn Văn Hùng", role: "Trưởng phòng Kỹ thuật", avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80", location: "Nha Trang", distance: "2.5km", isInternal: true },
+    { id: "mock-contact-2", name: "Trần Thị Mai", role: "Chuyên viên Spa nội bộ", avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80", location: "Hà Nội", distance: "1.2km", isInternal: true },
+    { id: "mock-contact-3", name: "Lê Quốc Bảo", role: "Đối tác Giao hàng tự do", avatarUrl: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&auto=format&fit=crop&q=80", location: "TP.HCM", distance: "4.8km", isInternal: false },
+    { id: "mock-contact-4", name: "Phạm Thùy Chi", role: "Bác sĩ thú y tự do", avatarUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&auto=format&fit=crop&q=80", location: "Đà Nẵng", distance: "3.1km", isInternal: false }
+  ]);
   const [syncingContacts, setSyncingContacts] = useState(false);
+  const [showJoinWorkspaceModal, setShowJoinWorkspaceModal] = useState(false);
+  const [workspaceCode, setWorkspaceCode] = useState("");
+  const [joiningWorkspace, setJoiningWorkspace] = useState(false);
 
   // Sidebar Tabs State: chat (Trò chuyện) or contacts (Danh bạ / Lời mời)
   const [sidebarTab, setSidebarTab] = useState<"chat" | "contacts">("chat");
@@ -355,9 +363,32 @@ function MessengerContent() {
     setSyncingContacts(true);
     setTimeout(() => {
       setSyncingContacts(false);
-      setContacts([]);
-      toast.success("Đồng bộ danh bạ điện thoại hoàn tất! Đã đồng bộ 0 liên hệ mới.");
+      toast.success("Đồng bộ danh bạ hoàn tất! Đã cập nhật trạng thái liên hệ.");
     }, 2000);
+  };
+
+  const handleJoinWorkspace = () => {
+    if (!workspaceCode.trim()) {
+      toast.error("Vui lòng nhập mã doanh nghiệp!");
+      return;
+    }
+    setJoiningWorkspace(true);
+    setTimeout(() => {
+      setJoiningWorkspace(false);
+      setShowJoinWorkspaceModal(false);
+      setWorkspaceCode("");
+      toast("⏳ Đã gửi yêu cầu! Vui lòng chờ Quản lý công ty phê duyệt để tham gia vào nhóm nội bộ.", {
+        icon: "⏳",
+        style: {
+          background: "#1e293b",
+          border: "1px solid #d97706",
+          color: "#f59e0b",
+          fontSize: "11px",
+          fontWeight: "bold",
+          maxWidth: "350px"
+        }
+      });
+    }, 1500);
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -763,6 +794,16 @@ function MessengerContent() {
                     )}
                   </button>
 
+                  {/* Join Workspace Button */}
+                  <button
+                    type="button"
+                    onClick={() => setShowJoinWorkspaceModal(true)}
+                    className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 hover:bg-slate-850 text-slate-200 font-extrabold shadow-md active:scale-98 transition-all cursor-pointer text-3xs"
+                  >
+                    <span>🏢</span>
+                    <span>Gia nhập Không gian Doanh Nghiệp</span>
+                  </button>
+
                   <p className="text-[10px] uppercase tracking-wider text-slate-550 font-extrabold px-2 mt-2">Bạn bè & Đồng nghiệp ({contacts.length})</p>
                   
                   {contacts.length === 0 ? (
@@ -794,7 +835,14 @@ function MessengerContent() {
                             <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-slate-950 bg-emerald-500" />
                           </div>
                           <div className="min-w-0 flex-1">
-                            <p className="text-xs font-bold text-slate-200 truncate">{contact.name}</p>
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <p className="text-xs font-bold text-slate-200 truncate">{contact.name}</p>
+                              {contact.isInternal && (
+                                <span className="inline-flex items-center gap-0.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[8px] font-extrabold px-1.5 py-0.2 rounded-full">
+                                  ✓ Nhân viên nội bộ
+                                </span>
+                              )}
+                            </div>
                             <p className="text-3xs text-slate-450 truncate mt-0.5">
                               {contact.role}
                             </p>
@@ -1390,17 +1438,21 @@ function MessengerContent() {
                   ) : (
                     contacts.map((user) => {
                       const isSelected = selectedUserIds.includes(user.id);
+                      // In HR group chats, ONLY Internal staff are allowed. Regular contacts are disabled.
+                      const isDisabled = groupType === "HR" && !user.isInternal;
+
                       return (
                         <div
                           key={user.id}
                           onClick={() => {
+                            if (isDisabled) return;
                             if (isSelected) {
                               setSelectedUserIds(prev => prev.filter(id => id !== user.id));
                             } else {
                               setSelectedUserIds(prev => [...prev, user.id]);
                             }
                           }}
-                          className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-900 cursor-pointer transition-all duration-300"
+                          className={`flex items-center justify-between p-2 rounded-lg hover:bg-slate-900 transition-all duration-300 ${isDisabled ? "opacity-35 cursor-not-allowed select-none" : "cursor-pointer"}`}
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
                             <img
@@ -1409,15 +1461,23 @@ function MessengerContent() {
                               className="h-6.5 w-6.5 rounded-full object-cover"
                             />
                             <div className="min-w-0">
-                              <span className="block text-3xs font-bold text-slate-200 truncate">{user.name}</span>
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="block text-3xs font-bold text-slate-200 truncate">{user.name}</span>
+                                {user.isInternal && (
+                                  <span className="inline-flex items-center text-[7px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-450 px-1 py-0.1 rounded-full">
+                                    ✓ Nội bộ
+                                  </span>
+                                )}
+                              </div>
                               <span className="block text-5xs text-slate-500 truncate">{user.role}</span>
                             </div>
                           </div>
                           <input
                             type="checkbox"
                             checked={isSelected}
-                            readOnly
-                            className="h-3.5 w-3.5 rounded border-slate-800 text-blue-600 focus:ring-0 cursor-pointer"
+                            disabled={isDisabled}
+                            onChange={() => {}} // Controlled by wrapper div onClick
+                            className="h-3.5 w-3.5 rounded border-slate-800 text-blue-600 focus:ring-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                           />
                         </div>
                       );
@@ -1589,6 +1649,65 @@ function MessengerContent() {
                 )}
               </>
             )}
+          </div>
+        </div>
+      )}
+      {/* JOIN WORKSPACE MODAL */}
+      {showJoinWorkspaceModal && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 space-y-4 animate-scaleUp text-slate-100">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
+                <span>🏢</span>
+                Gia nhập Không gian làm việc
+              </h3>
+              <button
+                onClick={() => {
+                  setShowJoinWorkspaceModal(false);
+                  setWorkspaceCode("");
+                }}
+                className="p-1 hover:bg-slate-800 rounded-lg text-slate-400 cursor-pointer transition-all"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs">
+              <p className="text-3xs text-slate-400 leading-relaxed">
+                Nhập mã mời doanh nghiệp của bạn để gia nhập không gian làm việc chính thức, liên kết danh bạ đồng nghiệp nội bộ và mở khóa các công cụ chấm công chuyên biệt.
+              </p>
+              
+              <div className="space-y-1">
+                <label className="block text-4xs font-bold text-slate-400">MÃ DOANH NGHIỆP</label>
+                <input
+                  type="text"
+                  placeholder="VD: BITPAW-8899..."
+                  value={workspaceCode}
+                  onChange={(e) => setWorkspaceCode(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 uppercase"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 border-t border-slate-800 pt-3">
+              <button
+                onClick={() => {
+                  setShowJoinWorkspaceModal(false);
+                  setWorkspaceCode("");
+                }}
+                className="rounded-xl px-4 py-2 text-3xs font-bold bg-slate-950 text-slate-400 hover:text-white border border-slate-800 cursor-pointer transition-colors"
+              >
+                Hủy bỏ
+              </button>
+              <button
+                onClick={handleJoinWorkspace}
+                disabled={joiningWorkspace}
+                className="rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 px-4 py-2.5 text-3xs font-extrabold text-white transition-all flex items-center gap-1.5 cursor-pointer"
+              >
+                {joiningWorkspace && <Loader2 className="h-3 w-3 animate-spin" />}
+                <span>Gửi yêu cầu phê duyệt</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
