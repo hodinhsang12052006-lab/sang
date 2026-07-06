@@ -197,17 +197,17 @@ async function runWorker(
         // Scroll sidebar to load search result cards
         const feed = page.locator('div[role="feed"]');
         if ((await feed.count()) > 0) {
-          let lastHeight = await feed.evaluate((el) => el.scrollHeight);
+          let lastHeight = await feed.evaluate((el: any) => el.scrollHeight);
           let scrollAttempts = 0;
 
           while (scrollAttempts < 5) {
             const currentCount = await page.locator('a[href*="/maps/place/"]').count();
             if (currentCount >= MAX_STORES_PER_KEYWORD) break;
 
-            await feed.evaluate((el) => el.scrollTo(0, el.scrollHeight));
+            await feed.evaluate((el: any) => el.scrollTo(0, el.scrollHeight));
             await delay(1, 2);
 
-            const newHeight = await feed.evaluate((el) => el.scrollHeight);
+            const newHeight = await feed.evaluate((el: any) => el.scrollHeight);
             if (newHeight === lastHeight) {
               scrollAttempts++;
             } else {
