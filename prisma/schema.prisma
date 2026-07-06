@@ -294,3 +294,18 @@ model Booking {
   createdAt   DateTime @default(now())
 }
 
+model Store {
+  id          String   @id @default(cuid())
+  name        String
+  category    String
+  rating      Float?
+  reviewCount Int?     @default(0)
+  address     String
+  latitude    Float?
+  longitude   Float?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([name, address])
+}
+

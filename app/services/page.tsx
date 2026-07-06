@@ -59,6 +59,7 @@ export default function ServicesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedProvince, setSelectedProvince] = useState("all");
   const [sessionUser, setSessionUser] = useState<any>(null);
@@ -71,13 +72,71 @@ export default function ServicesPage() {
   const [zoom, setZoom] = useState<number>(14);
   const [activeLocation, setActiveLocation] = useState<[number, number] | null>(null);
 
-  const categories = [
-    { id: "all", label: "Tất cả ngành" },
-    { id: "Vận tải", label: "🛵 Vận tải" },
-    { id: "Sửa chữa", label: "🛠️ Sửa chữa" },
-    { id: "Điện lạnh", label: "❄️ Điện lạnh" },
-    { id: "Thú cưng", label: "🐶 Thú cưng" },
-    { id: "F&B", label: "☕ F&B" },
+  // 8 Main Groups and 53 sub-services constants
+  const SERVICE_GROUPS = [
+    {
+      name: "Cứu hộ & Khẩn cấp",
+      icon: "🚨",
+      services: [
+        "Cứu hộ xe máy", "Cứu hộ ô tô", "Thợ sửa khóa", "Sửa điện nước khẩn cấp",
+        "Thông tắc vệ sinh", "Nhà thuốc 24/7", "Cấp cứu thú y", "Diệt côn trùng"
+      ]
+    },
+    {
+      name: "Bảo dưỡng & Sửa chữa",
+      icon: "🛠️",
+      services: [
+        "Sửa chữa máy lạnh", "Sửa điện máy gia dụng", "Dọn dẹp nhà cửa", "Giặt ủi nội thất",
+        "Thợ xây sửa nhỏ", "Lắp đặt camera", "Sửa cửa cuốn cửa kính"
+      ]
+    },
+    {
+      name: "Làm đẹp & Cá nhân",
+      icon: "💅",
+      services: [
+        "Cắt tóc nam barber", "Salon tóc nữ", "Spa Massage", "Tiệm Nails",
+        "Phun xăm thẩm mỹ", "Phòng tập Gym Yoga", "Trang điểm Makeup"
+      ]
+    },
+    {
+      name: "Vận tải & Di chuyển",
+      icon: "🛵",
+      services: [
+        "Thuê xe máy", "Thuê ô tô tự lái", "Chuyển nhà trọn gói", "Xe tải chở thuê",
+        "Đưa đón sân bay", "Tài xế lái xe hộ", "Chạy xe ôm công nghệ Grab"
+      ]
+    },
+    {
+      name: "Đời sống & Tiện ích",
+      icon: "🏠",
+      services: [
+        "Giặt ủi dân dụng", "Giao gas tận nhà", "Giao nước khoáng", "Sửa quần áo giày dép",
+        "In ấn Photocopy", "Rửa xe chăm sóc xe", "Giao đá viên hỏa tốc", "Sửa chữa máy tính laptop"
+      ]
+    },
+    {
+      name: "Thú cưng & Trẻ em",
+      icon: "🐶",
+      services: [
+        "Spa thú cưng", "Khách sạn thú cưng", "Trông trẻ theo giờ",
+        "Gia sư trung tâm dạy kèm", "Khu vui chơi trẻ em"
+      ]
+    },
+    {
+      name: "Giải trí & F&B",
+      icon: "☕",
+      services: [
+        "Quán ăn đêm", "Cà phê làm việc", "Cyber Gaming tiệm net", "Billiards bida",
+        "Karaoke", "Nấu tiệc tại nhà", "Thuê đồ sự kiện", "Cho thuê trang phục"
+      ]
+    },
+    {
+      name: "Y tế & Hành chính",
+      icon: "💼",
+      services: [
+        "Y tế tại nhà", "Dịch vụ giấy tờ pháp lý", "Mua bán sửa chữa điện thoại iphone"
+      ]
+    }
   ];
 
   const provinces = [
@@ -229,7 +288,28 @@ export default function ServicesPage() {
       loc.niche.toLowerCase().includes(aiQuery.toLowerCase()) ||
       loc.tags.some((tag: string) => tag.toLowerCase().includes(aiQuery.toLowerCase()));
 
-    const matchesCategory = selectedCategory === "all" || loc.niche === selectedCategory;
+    const matchesCategory = (() => {
+      if (selectedGroup === "all") {
+        return selectedCategory === "all" || 
+          loc.niche === selectedCategory ||
+          loc.niche.toLowerCase().includes(selectedCategory.toLowerCase()) ||
+          loc.tags.some((tag: string) => tag.toLowerCase().includes(selectedCategory.toLowerCase()));
+      }
+      
+      const activeGroup = SERVICE_GROUPS.find((g) => g.name === selectedGroup);
+      if (!activeGroup) return false;
+
+      if (selectedCategory === "all") {
+        return activeGroup.services.some(
+          (srv) =>
+            loc.niche.toLowerCase().includes(srv.toLowerCase()) ||
+            loc.tags.some((tag: string) => tag.toLowerCase().includes(srv.toLowerCase()))
+        );
+      } else {
+        return loc.niche.toLowerCase().includes(selectedCategory.toLowerCase()) ||
+          loc.tags.some((tag: string) => tag.toLowerCase().includes(selectedCategory.toLowerCase()));
+      }
+    })();
 
     return matchesSearch && matchesAISearch && matchesCategory;
   });
@@ -310,21 +390,68 @@ export default function ServicesPage() {
                   />
                 </div>
 
-                <div className="flex flex-wrap gap-1">
-                  {categories.map((cat) => (
+                {/* Main Groups (Horizontal Scrollable) */}
+                <div className="flex gap-1.5 overflow-x-auto whitespace-nowrap pb-2 border-b border-slate-850/60 scrollbar-none">
+                  <button
+                    onClick={() => {
+                      setSelectedGroup("all");
+                      setSelectedCategory("all");
+                    }}
+                    className={`rounded-lg px-2.5 py-1.5 text-[10.5px] font-bold transition-all flex items-center gap-1 cursor-pointer flex-shrink-0 ${
+                      selectedGroup === "all"
+                        ? "bg-blue-600 text-white"
+                        : "bg-slate-900 text-slate-400 hover:bg-slate-850 hover:text-slate-200 border border-slate-800"
+                    }`}
+                  >
+                    🌍 Tất cả ngành
+                  </button>
+                  {SERVICE_GROUPS.map((group) => (
                     <button
-                      key={cat.id}
-                      onClick={() => setSelectedCategory(cat.id)}
-                      className={`rounded px-2 py-1 text-[10px] font-bold transition-all ${
-                        selectedCategory === cat.id
+                      key={group.name}
+                      onClick={() => {
+                        setSelectedGroup(group.name);
+                        setSelectedCategory("all");
+                      }}
+                      className={`rounded-lg px-2.5 py-1.5 text-[10.5px] font-bold transition-all flex items-center gap-1 cursor-pointer flex-shrink-0 ${
+                        selectedGroup === group.name
                           ? "bg-blue-600 text-white"
                           : "bg-slate-900 text-slate-400 hover:bg-slate-850 hover:text-slate-200 border border-slate-800"
                       }`}
                     >
-                      {cat.label}
+                      <span>{group.icon}</span>
+                      <span>{group.name}</span>
                     </button>
                   ))}
                 </div>
+
+                {/* Sub-services tags/chips */}
+                {selectedGroup !== "all" && (
+                  <div className="flex flex-wrap gap-1.5 pt-1.5 animate-fadeIn max-h-[140px] overflow-y-auto custom-scrollbar">
+                    <button
+                      onClick={() => setSelectedCategory("all")}
+                      className={`rounded-full px-2.5 py-1 text-[9.5px] font-bold border transition-all cursor-pointer ${
+                        selectedCategory === "all"
+                          ? "bg-blue-500/20 text-blue-300 border-blue-500/50"
+                          : "bg-slate-950 text-slate-400 border-slate-900 hover:border-slate-800 hover:text-slate-200"
+                      }`}
+                    >
+                      Tất cả {selectedGroup}
+                    </button>
+                    {SERVICE_GROUPS.find((g) => g.name === selectedGroup)?.services.map((srv) => (
+                      <button
+                        key={srv}
+                        onClick={() => setSelectedCategory(srv)}
+                        className={`rounded-full px-2.5 py-1 text-[9.5px] font-bold border transition-all cursor-pointer ${
+                          selectedCategory === srv
+                            ? "bg-blue-500/20 text-blue-300 border-blue-500/50"
+                            : "bg-slate-950 text-slate-400 border-slate-900 hover:border-slate-800 hover:text-slate-200"
+                        }`}
+                      >
+                        {srv}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -452,6 +579,13 @@ export default function ServicesPage() {
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: #334155;
+        }
+        .scrollbar-none::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-none {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}</style>
     </div>
