@@ -355,13 +355,8 @@ function MessengerContent() {
     setSyncingContacts(true);
     setTimeout(() => {
       setSyncingContacts(false);
-      setContacts([
-        { id: "mock-contact-1", name: "Nguyễn Văn Hùng", role: "Thợ sửa khóa chuyên nghiệp", avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80", location: "Nha Trang", distance: "2.5km" },
-        { id: "mock-contact-2", name: "Trần Thị Mai", role: "Chuyên viên Spa thú cưng", avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80", location: "Hà Nội", distance: "1.2km" },
-        { id: "mock-contact-3", name: "Lê Quốc Bảo", role: "Tài xế cứu hộ ô tô", avatarUrl: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&auto=format&fit=crop&q=80", location: "TP.HCM", distance: "4.8km" },
-        { id: "mock-contact-4", name: "Phạm Thùy Chi", role: "Bác sĩ thú y", avatarUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&auto=format&fit=crop&q=80", location: "Đà Nẵng", distance: "3.1km" }
-      ]);
-      toast.success("Đã đồng bộ thành công 4 liên hệ từ danh bạ điện thoại của bạn!");
+      setContacts([]);
+      toast.success("Đồng bộ danh bạ điện thoại hoàn tất! Đã đồng bộ 0 liên hệ mới.");
     }, 2000);
   };
 
@@ -1387,40 +1382,47 @@ function MessengerContent() {
               <div>
                 <label className="block text-4xs font-bold text-slate-400 mb-1">CHỌN THÀNH VIÊN</label>
                 <div className="max-h-40 overflow-y-auto border border-slate-800 rounded-xl p-2 space-y-1.5 bg-slate-950/50 custom-scrollbar">
-                  {systemUsers.map((user) => {
-                    const isSelected = selectedUserIds.includes(user.id);
-                    return (
-                      <div
-                        key={user.id}
-                        onClick={() => {
-                          if (isSelected) {
-                            setSelectedUserIds(prev => prev.filter(id => id !== user.id));
-                          } else {
-                            setSelectedUserIds(prev => [...prev, user.id]);
-                          }
-                        }}
-                        className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-900 cursor-pointer transition-all duration-300"
-                      >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <img
-                            src={user.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2563eb&color=ffffff&bold=true`}
-                            alt={user.name}
-                            className="h-6.5 w-6.5 rounded-full object-cover"
-                          />
-                          <div className="min-w-0">
-                            <span className="block text-3xs font-bold text-slate-200 truncate">{user.name}</span>
-                            <span className="block text-5xs text-slate-500 truncate">{user.role}</span>
+                  {contacts.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-6 text-center text-slate-500 text-4xs font-semibold">
+                      <span>👥</span>
+                      <p className="mt-1">Trống. Vui lòng thêm bạn bè trước khi tạo nhóm.</p>
+                    </div>
+                  ) : (
+                    contacts.map((user) => {
+                      const isSelected = selectedUserIds.includes(user.id);
+                      return (
+                        <div
+                          key={user.id}
+                          onClick={() => {
+                            if (isSelected) {
+                              setSelectedUserIds(prev => prev.filter(id => id !== user.id));
+                            } else {
+                              setSelectedUserIds(prev => [...prev, user.id]);
+                            }
+                          }}
+                          className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-900 cursor-pointer transition-all duration-300"
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <img
+                              src={user.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2563eb&color=ffffff&bold=true`}
+                              alt={user.name}
+                              className="h-6.5 w-6.5 rounded-full object-cover"
+                            />
+                            <div className="min-w-0">
+                              <span className="block text-3xs font-bold text-slate-200 truncate">{user.name}</span>
+                              <span className="block text-5xs text-slate-500 truncate">{user.role}</span>
+                            </div>
                           </div>
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            readOnly
+                            className="h-3.5 w-3.5 rounded border-slate-800 text-blue-600 focus:ring-0 cursor-pointer"
+                          />
                         </div>
-                        <input
-                          type="checkbox"
-                          checked={isSelected}
-                          readOnly
-                          className="h-3.5 w-3.5 rounded border-slate-800 text-blue-600 focus:ring-0 cursor-pointer"
-                        />
-                      </div>
-                    );
-                  })}
+                      );
+                    })
+                  )}
                 </div>
               </div>
             </div>
