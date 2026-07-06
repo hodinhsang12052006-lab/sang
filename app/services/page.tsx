@@ -139,7 +139,8 @@ export default function ServicesPage() {
     { id: "Hà Nội", label: "📍 Hà Nội" },
     { id: "Đà Nẵng", label: "📍 Đà Nẵng" },
     { id: "Cần Thơ", label: "📍 Cần Thơ" },
-    { id: "Hải Phòng", label: "📍 Hải Phòng" },
+    { id: "Nha Trang", label: "📍 Nha Trang" },
+    { id: "An Giang", label: "📍 An Giang" },
   ];
 
   // Geolocation navigator to center on user
@@ -174,33 +175,105 @@ export default function ServicesPage() {
     loadSession();
   }, []);
 
-  // Load DB Services based on province selector
+  // Auto-pan map center when province selection changes
   useEffect(() => {
-    async function fetchServices() {
+    const PROVINCE_CENTERS: Record<string, [number, number]> = {
+      "all": [16.0471, 108.2062],
+      "TP. Hồ Chí Minh": [10.7769, 106.6953],
+      "Hà Nội": [21.0285, 105.8542],
+      "Đà Nẵng": [16.0471, 108.2062],
+      "Cần Thơ": [10.0452, 105.7469],
+      "Nha Trang": [12.2450, 109.1950],
+      "An Giang": [10.3759, 105.4185]
+    };
+    const newCenter = PROVINCE_CENTERS[selectedProvince];
+    if (newCenter) {
+      setCenter(newCenter);
+      setZoom(selectedProvince === "all" ? 6 : 14);
+    }
+  }, [selectedProvince]);
+
+  // Load both static merged stores and dynamic registered services
+  useEffect(() => {
+    const PROVINCE_SLUGS: Record<string, string> = {
+      "TP. Hồ Chí Minh": "TP_HCM",
+      "TP.HCM": "TP_HCM",
+      "Hà Nội": "Ha_Noi",
+      "Đà Nẵng": "da_Nang",
+      "Cần Thơ": "Can_Tho",
+      "Nha Trang": "Nha_Trang",
+      "An Giang": "An_Giang"
+    };
+
+    async function loadAllData() {
       try {
         setLoading(true);
         setError(null);
+
+        // 1. Fetch dynamic database services
         const provinceParam = selectedProvince === "all" ? "" : selectedProvince;
-        const res = await fetch(`/api/services?province=${encodeURIComponent(provinceParam)}`);
-        if (!res.ok) {
-          throw new Error("Không thể tải danh sách dịch vụ cửa hàng.");
+        const dynRes = await fetch(`/api/services?province=${encodeURIComponent(provinceParam)}`);
+        let dynamicData = [];
+        if (dynRes.ok) {
+          dynamicData = await dynRes.json();
         }
-        const data = await res.json();
-        
-        // Inject ratings mock value on dynamic database models
-        const resolvedData = data.map((srv: any) => ({
+
+        // 2. Fetch merged static crawled stores
+        const staticRes = await fetch("/data/all_services.json");
+        let staticData = [];
+        if (staticRes.ok) {
+          staticData = await staticRes.json();
+        }
+
+        // 3. Filter static stores based on selectedProvince slug
+        let filteredStatic = staticData;
+        if (selectedProvince !== "all") {
+          const slug = PROVINCE_SLUGS[selectedProvince] || selectedProvince;
+          filteredStatic = staticData.filter((store: any) => store.province === slug);
+        }
+
+        // 4. Map static stores to ServiceType schema
+        const mappedStatic = filteredStatic.map((store: any) => ({
+          id: store.id,
+          name: store.name,
+          category: store.category,
+          description: `Cửa hàng định vị tự động qua Google Maps • ${store.reviewCount || 0} đánh giá`,
+          location: `${store.latitude},${store.longitude}`,
+          city: store.province.replace(/_/g, " "),
+          contactInfo: "0900 123 456",
+          rating: store.rating || 4.5,
+          ownerId: "google-maps-crawled",
+          isBoosted: false,
+          priceRange: "Liên hệ thỏa thuận",
+          vehicleInfo: null,
+          isEmergency: false,
+          workType: "Toàn thời gian",
+          owner: {
+            id: "crawled-google-maps",
+            name: "Google Maps Verified",
+            email: "crawled@pawbook.com",
+            avatarUrl: null,
+            role: "EMPLOYER",
+            bio: "Thông tin vị trí tự động từ Google Maps",
+            isVerified: true
+          }
+        }));
+
+        // 5. Inject ratings on dynamic registered services
+        const resolvedDynamic = dynamicData.map((srv: any) => ({
           ...srv,
           rating: srv.rating || parseFloat((Math.random() * 0.5 + 4.5).toFixed(1)),
         }));
-        
-        setServices(resolvedData);
+
+        setServices([...resolvedDynamic, ...mappedStatic]);
       } catch (err: any) {
-        setError(err.message || "Đã xảy ra lỗi.");
+        setError(err.message || "Đã xảy ra lỗi khi tải danh sách dịch vụ.");
       } finally {
         setLoading(false);
       }
     }
-    fetchServices();
+
+    loadAllData();
   }, [selectedProvince]);
 
   const handleAISubmit = (e: React.FormEvent) => {
