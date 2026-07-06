@@ -5,7 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import { 
   Send, User, Search, MessageSquare, Loader2, AlertCircle, Plus, Users, 
   Image, Video, Smile, X, Lock, Phone, Paperclip, Mic, Zap, Reply, Share2, Info,
-  MicOff, VideoOff, PhoneOff, Volume2, Clock, FileText
+  MicOff, VideoOff, PhoneOff, Volume2, Clock, FileText, Cpu, Briefcase
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
@@ -103,6 +103,7 @@ function MessengerContent() {
     isGroup: boolean;
     isOnline: boolean;
     statusText: string;
+    status?: string;
   } | null>(null);
 
   const [messageText, setMessageText] = useState("");
@@ -132,11 +133,12 @@ function MessengerContent() {
   const [micMuted, setMicMuted] = useState(false);
   const [videoOff, setVideoOff] = useState(false);
   const [contacts, setContacts] = useState<any[]>([
-    { id: "mock-contact-1", name: "Nguyễn Văn Hùng", role: "Trưởng phòng Kỹ thuật", avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80", location: "Nha Trang", distance: "2.5km", isInternal: true },
-    { id: "mock-contact-2", name: "Trần Thị Mai", role: "Chuyên viên Spa nội bộ", avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80", location: "Hà Nội", distance: "1.2km", isInternal: true },
-    { id: "mock-contact-3", name: "Lê Quốc Bảo", role: "Đối tác Giao hàng tự do", avatarUrl: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&auto=format&fit=crop&q=80", location: "TP.HCM", distance: "4.8km", isInternal: false },
-    { id: "mock-contact-4", name: "Phạm Thùy Chi", role: "Bác sĩ thú y tự do", avatarUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&auto=format&fit=crop&q=80", location: "Đà Nẵng", distance: "3.1km", isInternal: false }
+    { id: "mock-contact-1", name: "Nguyễn Văn Hùng", role: "Trưởng phòng Kỹ thuật", avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80", location: "Nha Trang", distance: "2.5km", isInternal: true, status: "free" },
+    { id: "mock-contact-2", name: "Trần Thị Mai", role: "Chuyên viên Spa nội bộ", avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80", location: "Hà Nội", distance: "1.2km", isInternal: true, status: "busy" },
+    { id: "mock-contact-3", name: "Lê Quốc Bảo", role: "Đối tác Giao hàng tự do", avatarUrl: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&auto=format&fit=crop&q=80", location: "TP.HCM", distance: "4.8km", isInternal: false, status: "free" },
+    { id: "mock-contact-4", name: "Phạm Thùy Chi", role: "Bác sĩ thú y tự do", avatarUrl: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&auto=format&fit=crop&q=80", location: "Đà Nẵng", distance: "3.1km", isInternal: false, status: "busy" }
   ]);
+  const [jobStates, setJobStates] = useState<Record<string, 'OPEN' | 'ACCEPTED' | 'COMPLETED'>>({});
   const [syncingContacts, setSyncingContacts] = useState(false);
   const [showJoinWorkspaceModal, setShowJoinWorkspaceModal] = useState(false);
   const [workspaceCode, setWorkspaceCode] = useState("");
@@ -826,13 +828,14 @@ function MessengerContent() {
                             role: contact.role,
                             isGroup: false,
                             isOnline: true,
-                            statusText: `Đang ở ${contact.location} • Cách bạn ${contact.distance}`
+                            statusText: `Đang ở ${contact.location} • Cách bạn ${contact.distance}`,
+                            status: contact.status
                           })}
                           className="flex items-center gap-3 p-2.5 rounded-xl cursor-pointer hover:bg-slate-900/40 border border-transparent transition-all duration-300"
                         >
                           <div className="relative flex-shrink-0">
                             <div className="h-10 w-10 rounded-full overflow-hidden border border-slate-800 bg-slate-900 flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${contact.avatarUrl})` }} />
-                            <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-slate-950 bg-emerald-500" />
+                            <span className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-slate-950 ${contact.status === "busy" ? "bg-red-500 animate-pulse" : "bg-emerald-500"}`} />
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-1.5 flex-wrap">
@@ -881,13 +884,13 @@ function MessengerContent() {
                         )}
                       </div>
                       {!activeChat.isGroup && (
-                        <span className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-slate-950 ${activeChat.isOnline ? "bg-emerald-500" : "bg-slate-500"}`} />
+                        <span className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-slate-950 ${(activeChat as any).status === "busy" ? "bg-red-500 animate-pulse" : "bg-emerald-500"}`} />
                       )}
                     </div>
                     <div>
                       <h3 className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
                         <span>{activeChat.name}</span>
-                        <span className={`h-2 w-2 rounded-full ${activeChat.isOnline ? "bg-emerald-500 animate-pulse" : "bg-slate-500"}`} />
+                        <span className={`h-2 w-2 rounded-full ${(activeChat as any).status === "busy" ? "bg-red-500 animate-pulse" : "bg-emerald-500"}`} />
                       </h3>
                       {/* E2EE Subheader Indicator */}
                       <div className="flex items-center gap-1 mt-0.5 animate-fadeIn">
@@ -895,7 +898,7 @@ function MessengerContent() {
                         <span className="text-[9px] font-semibold text-emerald-500 uppercase tracking-wider">Mã hóa đầu cuối (E2EE)</span>
                         <span className="text-slate-655 mx-1">•</span>
                         <span className="text-4xs text-slate-500 leading-none">
-                          {activeChat.isOnline ? "Đang hoạt động" : activeChat.statusText}
+                          {(activeChat as any).status === "busy" ? "Đang phục vụ khách (Bận)" : "Sẵn sàng nhận việc (Rảnh)"}
                         </span>
                       </div>
                     </div>
@@ -943,6 +946,18 @@ function MessengerContent() {
                     activeConversation.map((msg: any) => {
                       const isSelf = msg.senderId === "self" || msg.senderId === currentUser?.id;
                       const senderAvatar = msg.sender?.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(msg.sender?.name || "U")}&background=2563eb&color=ffffff&bold=true`;
+
+                      if (msg.type === "SYSTEM" || msg.isSystem) {
+                        return (
+                          <div key={msg.id} className="flex justify-center my-3 w-full animate-fadeIn">
+                            <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-slate-900/60 border border-slate-850 text-[10px] text-slate-400 font-semibold tracking-wide font-sans shadow-inner">
+                              <span>🤖</span>
+                              <span>{msg.content}</span>
+                            </div>
+                          </div>
+                        );
+                      }
+
                       return (
                         <div
                           key={msg.id}
@@ -1247,6 +1262,32 @@ function MessengerContent() {
                         title="Chấm công GPS"
                       >
                         <Clock className="h-5 w-5" />
+                      </button>
+
+                      {/* Job Dispatch Card Trigger */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleSendMessage(null, "💅 Dịch vụ: Gói Massage Cổ Vai Gáy (Khách VIP - Phòng 3)\n💰 Hoa hồng: 150,000 VNĐ\n⏰ Thời gian: Bắt đầu ngay", "JOB");
+                          toast.success("⚡ Đã phân phối thẻ nhận việc (Job Card) mới!");
+                        }}
+                        className="p-2 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-slate-900 transition-all duration-300 cursor-pointer"
+                        title="Tạo Job Card điều phối"
+                      >
+                        <Briefcase className="h-5 w-5" />
+                      </button>
+
+                      {/* System Bot Recommendation Trigger */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleSendMessage(null, "Hệ thống đề xuất: Kèo này ưu tiên cho @Trần-Thị-Mai vì đang có ít đơn nhất trong ngày.", "SYSTEM");
+                          toast.success("🤖 Đã gửi đề xuất hệ thống!");
+                        }}
+                        className="p-2 rounded-lg text-slate-400 hover:text-indigo-400 hover:bg-slate-900 transition-all duration-300 cursor-pointer"
+                        title="Đề xuất của Robot hệ thống"
+                      >
+                        <Cpu className="h-5 w-5" />
                       </button>
 
                       {/* Quotation Contract Trigger */}
